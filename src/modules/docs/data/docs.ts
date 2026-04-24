@@ -767,12 +767,12 @@ function mapUser(dto: UserDto): User {
     ],
     recommended: {
       title: "Import stable contracts directly",
-      code: `import { formatCurrency } from "@/src/shared/format-currency"
-import { InvoiceSummary } from "@/src/modules/invoices/ui/InvoiceSummary"`,
+      code: `import { formatCurrency } from "@/shared/format-currency"
+import { InvoiceSummary } from "@/modules/invoices/ui/InvoiceSummary"`,
     },
     avoid: {
       title: "Import from broad barrels",
-      code: `import { formatCurrency, InvoiceSummary, useInvoiceQuery } from "@/src"`,
+      code: `import { formatCurrency, InvoiceSummary, useInvoiceQuery } from "@/"`,
     },
     why:
       "Direct imports make ownership and bundle impact easier to see. Broad barrels can accidentally pull unrelated code into a client bundle.",

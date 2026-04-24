@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CopyButton } from "@/app/_components/copy-button";
-import { SiteHeader } from "@/app/_components/site-header";
+import { SiteHeader } from "@/modules/docs/components/site-header";
 import {
   type CodeExample,
   type DocPage,
@@ -15,7 +14,8 @@ import {
   getSectionOwner,
   getSectionTitle,
   popularSlugs,
-} from "@/app/_data/docs";
+} from "@/modules/docs/data/docs";
+import { CopyButton } from "@/shared/ui/copy-button";
 
 type DocsPageProps = {
   params: Promise<{

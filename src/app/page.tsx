@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SiteHeader } from "@/app/_components/site-header";
+import { SiteHeader } from "@/modules/docs/components/site-header";
 import {
   docs,
   getDocBySlug,
@@ -7,7 +7,7 @@ import {
   intentEntrypoints,
   popularSlugs,
   roleEntrypoints,
-} from "@/app/_data/docs";
+} from "@/modules/docs/data/docs";
 
 const latestDocs = [...docs]
   .sort((left, right) => right.lastUpdated.localeCompare(left.lastUpdated))

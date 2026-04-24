@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { searchableDocs } from "@/app/_data/docs";
-import { SearchCommand } from "@/app/_components/search-command";
+import { SearchCommand } from "@/modules/docs/components/search-command";
+import { searchableDocs } from "@/modules/docs/data/docs";
 
 export function SiteHeader() {
   return (
