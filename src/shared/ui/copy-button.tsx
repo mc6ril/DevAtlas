@@ -6,7 +6,7 @@ type CopyButtonProps = {
   value: string;
 };
 
-export function CopyButton({ value }: CopyButtonProps) {
+export const CopyButton = ({ value }: CopyButtonProps) => {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export function CopyButton({ value }: CopyButtonProps) {
     return () => window.clearTimeout(timeout);
   }, [copied]);
 
-  async function copyValue() {
+  const copyValue = async () => {
     try {
       if (navigator.clipboard) {
         await navigator.clipboard.writeText(value);
@@ -38,7 +38,7 @@ export function CopyButton({ value }: CopyButtonProps) {
     } catch {
       setCopied(false);
     }
-  }
+  };
 
   return (
     <button
@@ -49,4 +49,4 @@ export function CopyButton({ value }: CopyButtonProps) {
       {copied ? "Copied" : "Copy"}
     </button>
   );
-}
+};

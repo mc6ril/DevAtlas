@@ -229,7 +229,7 @@ Can you move things around until it looks more like the rest?`,
     ],
     recommended: {
       title: "Orchestrate behavior outside the view",
-      code: `function ProfileScreen() {
+      code: `const ProfileScreen = () => {
   const profile = useProfileScreen()
 
   return <ProfileView {...profile} />
@@ -237,7 +237,7 @@ Can you move things around until it looks more like the rest?`,
     },
     avoid: {
       title: "Mix API calls, mapping, and UI",
-      code: `function ProfileScreen() {
+      code: `const ProfileScreen = () => {
   const [user, setUser] = useState<UserDto | null>(null)
 
   useEffect(() => {
@@ -472,7 +472,7 @@ utils/profile.ts`,
   onRetry: () => void
 }
 
-export function ProfileView(props: ProfileViewProps) {
+export const ProfileView = (props: ProfileViewProps) => {
   if (props.isLoading) return <LoadingState />
   if (props.error) return <ErrorState onRetry={props.onRetry} />
   if (!props.user) return <EmptyState />
@@ -482,7 +482,7 @@ export function ProfileView(props: ProfileViewProps) {
     },
     avoid: {
       title: "View imports services",
-      code: `export function ProfileView() {
+      code: `export const ProfileView = () => {
   const [user, setUser] = useState<UserDto | null>(null)
 
   useEffect(() => {
@@ -535,7 +535,7 @@ export function ProfileView(props: ProfileViewProps) {
   onReject: () => void
 }
 
-export function InvoiceActions(props: InvoiceActionsProps) {
+export const InvoiceActions = (props: InvoiceActionsProps) => {
   return (
     <ActionBar>
       <Button disabled={!props.canApprove} onClick={props.onApprove}>
@@ -594,7 +594,7 @@ export function InvoiceActions(props: InvoiceActionsProps) {
     ],
     recommended: {
       title: "Return view-ready state",
-      code: `export function useProfileScreen() {
+      code: `export const useProfileScreen = () => {
   const profileQuery = useProfileQuery()
 
   return {
@@ -607,7 +607,7 @@ export function InvoiceActions(props: InvoiceActionsProps) {
     },
     avoid: {
       title: "Return raw implementation details",
-      code: `export function useProfileScreen() {
+      code: `export const useProfileScreen = () => {
   const query = useQuery({
     queryKey: ["profile"],
     queryFn: profileApi.getProfile,
@@ -664,7 +664,7 @@ type User = {
   fullName: string
 }
 
-function mapUser(dto: UserDto): User {
+const mapUser = (dto: UserDto): User => {
   return {
     id: dto.id,
     fullName: [dto.first_name, dto.last_name].join(" "),
@@ -673,7 +673,7 @@ function mapUser(dto: UserDto): User {
     },
     avoid: {
       title: "Use transport types everywhere",
-      code: `function UserHeader({ user }: { user: any }) {
+      code: `const UserHeader = ({ user }: { user: any }) => {
   return <Text>{user.first_name}</Text>
 }`,
     },
@@ -714,7 +714,7 @@ function mapUser(dto: UserDto): User {
     ],
     recommended: {
       title: "Map failures before rendering",
-      code: `async function loadProfile(): Promise<Result<Profile, AppError>> {
+      code: `const loadProfile = async (): Promise<Result<Profile, AppError>> => {
   try {
     const dto = await profileApi.getProfile()
     return ok(mapProfile(dto))
@@ -725,7 +725,7 @@ function mapUser(dto: UserDto): User {
     },
     avoid: {
       title: "Let unknown errors leak",
-      code: `async function loadProfile() {
+      code: `const loadProfile = async () => {
   const response = await fetch("/api/profile")
   return response.json()
 }`,
@@ -869,7 +869,7 @@ import { InvoiceSummary } from "@/modules/invoices/ui/InvoiceSummary"`,
     ],
     recommended: {
       title: "Derive during render",
-      code: `function InvoiceList({ invoices }: { invoices: Invoice[] }) {
+      code: `const InvoiceList = ({ invoices }: { invoices: Invoice[] }) => {
   const unpaidInvoices = invoices.filter((invoice) => invoice.status === "unpaid")
 
   return <InvoiceTable invoices={unpaidInvoices} />
@@ -877,7 +877,7 @@ import { InvoiceSummary } from "@/modules/invoices/ui/InvoiceSummary"`,
     },
     avoid: {
       title: "Mirror derived state with effects",
-      code: `function InvoiceList({ invoices }: { invoices: Invoice[] }) {
+      code: `const InvoiceList = ({ invoices }: { invoices: Invoice[] }) => {
   const [unpaidInvoices, setUnpaidInvoices] = useState<Invoice[]>([])
 
   useEffect(() => {
@@ -925,24 +925,28 @@ import { InvoiceSummary } from "@/modules/invoices/ui/InvoiceSummary"`,
     recommended: {
       title: "Keep client boundaries small",
       code: `// Server component
-export default function DocsPage() {
+const DocsPage = () => {
   return (
     <DocsLayout>
       <SearchCommand documents={searchableDocs} />
       <StaticArticle />
     </DocsLayout>
   )
-}`,
+}
+
+export default DocsPage`,
     },
     avoid: {
       title: "Ship a whole route as client code",
       code: `"use client"
 
-export default function DocsPage() {
+const DocsPage = () => {
   const [query, setQuery] = useState("")
 
   return <FullDocumentationApp query={query} onQueryChange={setQuery} />
-}`,
+}
+
+export default DocsPage`,
     },
     why:
       "Small client boundaries keep hydration work low and make pages faster to load. Direct imports also reduce accidental bundle growth.",
@@ -981,7 +985,7 @@ export default function DocsPage() {
     ],
     recommended: {
       title: "Screen delegates behavior",
-      code: `export function DevicePairingScreen() {
+      code: `export const DevicePairingScreen = () => {
   const pairing = useDevicePairingScreen()
 
   return <DevicePairingView {...pairing} />
@@ -989,7 +993,7 @@ export default function DocsPage() {
     },
     avoid: {
       title: "Native calls inside the view",
-      code: `export function DevicePairingView() {
+      code: `export const DevicePairingView = () => {
   useEffect(() => {
     BleManager.startScan()
   }, [])
@@ -1138,7 +1142,7 @@ export default function DocsPage() {
     ],
     recommended: {
       title: "Map at the boundary",
-      code: `export async function getProfile(): Promise<Profile> {
+      code: `export const getProfile = async (): Promise<Profile> => {
   const dto = await http.get<ProfileDto>("/profile")
 
   return mapProfile(dto)
@@ -1146,7 +1150,7 @@ export default function DocsPage() {
     },
     avoid: {
       title: "Return raw response to the screen",
-      code: `export async function getProfile() {
+      code: `export const getProfile = async () => {
   return fetch("/profile").then((response) => response.json())
 }`,
     },
@@ -1187,7 +1191,7 @@ export default function DocsPage() {
     ],
     recommended: {
       title: "Normalize external data",
-      code: `export function mapInvoice(dto: InvoiceDto): Invoice {
+      code: `export const mapInvoice = (dto: InvoiceDto): Invoice => {
   return {
     id: dto.id,
     number: dto.invoice_number,
@@ -1457,7 +1461,7 @@ Can you restructure this?`,
     ],
     recommended: {
       title: "Screen shell",
-      code: `export function AccountScreen() {
+      code: `export const AccountScreen = () => {
   const account = useAccountScreen()
 
   return <AccountView {...account} />
@@ -1465,7 +1469,7 @@ Can you restructure this?`,
     },
     avoid: {
       title: "Screen owns everything",
-      code: `export function AccountScreen() {
+      code: `export const AccountScreen = () => {
   const [account, setAccount] = useState<AccountDto | null>(null)
 
   useEffect(() => {
@@ -1517,7 +1521,7 @@ Can you restructure this?`,
   email: string
 }
 
-async function submitProfile(values: ProfileFormValues) {
+const submitProfile = async (values: ProfileFormValues) => {
   const result = validateProfile(values)
   if (!result.ok) return result
 
@@ -1526,7 +1530,7 @@ async function submitProfile(values: ProfileFormValues) {
     },
     avoid: {
       title: "Unstructured submit path",
-      code: `async function onSubmit(event: any) {
+      code: `const onSubmit = async (event: any) => {
   event.preventDefault()
   await api.save(event.target)
   alert("saved")
@@ -1570,7 +1574,7 @@ async function submitProfile(values: ProfileFormValues) {
     ],
     recommended: {
       title: "Data loading flow",
-      code: `export function useInvoicesScreen() {
+      code: `export const useInvoicesScreen = () => {
   const invoices = useInvoicesQuery()
 
   return {
@@ -1583,7 +1587,7 @@ async function submitProfile(values: ProfileFormValues) {
     },
     avoid: {
       title: "Fetch directly in a view",
-      code: `export function InvoicesView() {
+      code: `export const InvoicesView = () => {
   const [invoices, setInvoices] = useState([])
 
   useEffect(() => {
@@ -1667,39 +1671,37 @@ tradeoffs:
   },
 ];
 
-const sectionTitleById = new Map(docSections.map((section) => [section.id, section.title]));
-const sectionOwnerById = new Map(docSections.map((section) => [section.id, section.owner]));
+const sectionTitleById = new Map(
+  docSections.map((section) => [section.id, section.title]),
+);
+const sectionOwnerById = new Map(
+  docSections.map((section) => [section.id, section.owner]),
+);
 
-export function getSectionTitle(sectionId: string) {
-  return sectionTitleById.get(sectionId) ?? sectionId;
-}
+export const getSectionTitle = (sectionId: string) =>
+  sectionTitleById.get(sectionId) ?? sectionId;
 
-export function getSectionOwner(sectionId: string) {
-  return sectionOwnerById.get(sectionId) ?? "Unassigned";
-}
+export const getSectionOwner = (sectionId: string) =>
+  sectionOwnerById.get(sectionId) ?? "Unassigned";
 
-export function getDocBySlug(slug: string) {
-  return docs.find((doc) => doc.slug === slug);
-}
+export const getDocBySlug = (slug: string) => docs.find((doc) => doc.slug === slug);
 
-export function getDocsBySection(sectionId: string) {
-  return docs.filter((doc) => doc.section === sectionId);
-}
+export const getDocsBySection = (sectionId: string) =>
+  docs.filter((doc) => doc.section === sectionId);
 
-export function getRelatedDocs(doc: DocPage) {
-  return doc.related
+export const getRelatedDocs = (doc: DocPage) =>
+  doc.related
     .map((slug) => getDocBySlug(slug))
     .filter((relatedDoc): relatedDoc is DocPage => Boolean(relatedDoc));
-}
 
-export function getNeighborDocs(slug: string) {
+export const getNeighborDocs = (slug: string) => {
   const index = docs.findIndex((doc) => doc.slug === slug);
 
   return {
     previous: index > 0 ? docs[index - 1] : null,
     next: index >= 0 && index < docs.length - 1 ? docs[index + 1] : null,
   };
-}
+};
 
 export const popularSlugs = [
   "feature-development/create-a-feature",

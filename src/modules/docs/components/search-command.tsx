@@ -16,7 +16,7 @@ type SearchCommandProps = {
   documents: SearchDocument[];
 };
 
-function isTypingTarget(target: EventTarget | null) {
+const isTypingTarget = (target: EventTarget | null) => {
   if (!(target instanceof HTMLElement)) {
     return false;
   }
@@ -26,9 +26,9 @@ function isTypingTarget(target: EventTarget | null) {
     target.tagName === "TEXTAREA" ||
     target.isContentEditable
   );
-}
+};
 
-function scoreDocument(document: SearchDocument, query: string) {
+const scoreDocument = (document: SearchDocument, query: string) => {
   const normalizedTitle = document.title.toLowerCase();
   const normalizedSection = document.section.toLowerCase();
   const terms = query.split(/\s+/).filter(Boolean);
@@ -64,15 +64,15 @@ function scoreDocument(document: SearchDocument, query: string) {
 
     return score + 5;
   }, 0);
-}
+};
 
-export function SearchCommand({ documents }: SearchCommandProps) {
+export const SearchCommand = ({ documents }: SearchCommandProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
+    const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setIsOpen(false);
         return;
@@ -89,7 +89,7 @@ export function SearchCommand({ documents }: SearchCommandProps) {
       event.preventDefault();
       setIsOpen(true);
       requestAnimationFrame(() => inputRef.current?.focus());
-    }
+    };
 
     window.addEventListener("keydown", onKeyDown);
 
@@ -197,4 +197,4 @@ export function SearchCommand({ documents }: SearchCommandProps) {
       ) : null}
     </div>
   );
-}
+};

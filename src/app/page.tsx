@@ -19,9 +19,8 @@ const popularDocs = popularSlugs
     Boolean(doc),
   );
 
-export default function Home() {
-  return (
-    <div className="min-h-screen bg-slate-50 text-slate-950">
+const Home = () => (
+  <div className="min-h-screen bg-slate-50 text-slate-950">
       <SiteHeader />
 
       <main>
@@ -231,15 +230,15 @@ export default function Home() {
           </div>
         </section>
       </main>
-    </div>
-  );
-}
+  </div>
+);
 
-function formatDate(isoDate: string) {
-  return new Intl.DateTimeFormat("en", {
+const formatDate = (isoDate: string) =>
+  new Intl.DateTimeFormat("en", {
     month: "short",
     day: "numeric",
     year: "numeric",
     timeZone: "UTC",
   }).format(new Date(`${isoDate}T00:00:00Z`));
-}
+
+export default Home;

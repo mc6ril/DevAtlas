@@ -21,19 +21,19 @@ export const metadata: Metadata = {
     "Internal React and React Native coding standards, examples, recipes, and pull request criteria.",
 };
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
-  return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
-    >
-      <body className="min-h-full bg-slate-50 font-sans text-slate-950">
-        {children}
-      </body>
-    </html>
-  );
-}
+}>) => (
+  <html
+    lang="en"
+    className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
+  >
+    <body className="min-h-full bg-slate-50 font-sans text-slate-950">
+      {children}
+    </body>
+  </html>
+);
+
+export default RootLayout;
