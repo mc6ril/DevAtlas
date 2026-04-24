@@ -1,0 +1,44 @@
+{
+  "order": 1,
+  "title": "Pull Request Checklist",
+  "owner": "Engineering Manager",
+  "lastUpdated": "2026-04-22",
+  "tags": [
+    "pull-request",
+    "checklist",
+    "definition-of-done"
+  ],
+  "summary": "Open PRs that are small, explained, tested, and tied to standards.",
+  "purpose": "The PR checklist turns the documentation into the practical definition of done.",
+  "rule": "Every PR should state what changed, why it changed, how it was tested, and which standards are relevant. Keep PRs small enough for reviewers to reason about the behavior in one sitting.",
+  "whenToUse": [
+    "Before opening a pull request.",
+    "Before requesting re-review after changes.",
+    "When deciding whether a change needs architecture review."
+  ],
+  "whenNotToUse": [
+    "Do not use the checklist to block emergency fixes before mitigation.",
+    "Do not hide unrelated cleanup inside a feature PR."
+  ],
+  "recommended": {
+    "title": "PR description shape",
+    "code": "## What changed\nAdded profile loading, empty, and error states.\n\n## Why\nThe profile screen now supports the new account API.\n\n## Standards checked\n- Feature folder structure\n- API layer\n- Testing strategy\n\n## Verification\n- npm test\n- Manual retry flow on web and iOS"
+  },
+  "avoid": {
+    "title": "Low-signal PR description",
+    "code": "## What changed\nStuff\n\n## Testing\nLooks good locally"
+  },
+  "why": "A good PR description lets reviewers spend energy on correctness instead of reconstructing intent.",
+  "checklist": [
+    "PR has one primary purpose.",
+    "Relevant standards are linked.",
+    "Screens include loading, error, and empty states where applicable.",
+    "Tests or a clear test rationale are included.",
+    "Architecture-impacting choices are documented."
+  ],
+  "related": [
+    "pr-guide/reviewer-checklist",
+    "testing/overview",
+    "feature-development/create-a-feature"
+  ]
+}

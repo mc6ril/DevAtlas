@@ -1,0 +1,43 @@
+{
+  "order": 1,
+  "title": "Component Library Usage",
+  "owner": "Design System Team",
+  "lastUpdated": "2026-04-16",
+  "tags": [
+    "design-system",
+    "components",
+    "tokens"
+  ],
+  "summary": "Use shared components and tokens before creating custom UI.",
+  "purpose": "Design system standards keep product surfaces consistent and reduce duplicated accessibility work.",
+  "rule": "Use the component library for common controls, tokens for spacing and color, and create new shared components only when at least two product areas need the same contract.",
+  "whenToUse": [
+    "Building buttons, inputs, modals, tabs, menus, lists, or alerts.",
+    "Adding product UI that maps to an existing design token.",
+    "Proposing a reusable component."
+  ],
+  "whenNotToUse": [
+    "Do not create a shared component for one screen-specific layout.",
+    "Do not bypass tokens for one-off colors or spacing."
+  ],
+  "recommended": {
+    "title": "Use tokens and shared components",
+    "code": "<Stack gap=\"md\">\n  <Text variant=\"heading-sm\">Payment method</Text>\n  <Select value={method} onValueChange={setMethod} options={paymentOptions} />\n  <Button onClick={onSave}>Save</Button>\n</Stack>"
+  },
+  "avoid": {
+    "title": "Invent local UI primitives",
+    "code": "<div style={{ marginTop: 13, color: \"#3152ff\" }}>\n  <button className=\"my-special-button\">Save</button>\n</div>"
+  },
+  "why": "Shared UI contracts make accessibility, visual consistency, and QA coverage cheaper. One-off UI should remain local until reuse is real.",
+  "checklist": [
+    "Existing components were checked before creating new UI.",
+    "Spacing, color, typography, and icons use tokens.",
+    "New shared components include accessibility states.",
+    "Storybook coverage exists for reusable components."
+  ],
+  "related": [
+    "code-standards/components",
+    "react/component-composition",
+    "feature-development/ui-layer"
+  ]
+}

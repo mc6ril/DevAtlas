@@ -1,0 +1,43 @@
+{
+  "order": 1,
+  "title": "Frontend Architecture Principles",
+  "owner": "Frontend Tech Lead",
+  "lastUpdated": "2026-04-20",
+  "tags": [
+    "architecture",
+    "boundaries",
+    "principles"
+  ],
+  "summary": "Keep business rules independent from rendering and framework details.",
+  "purpose": "Architecture standards make features predictable to place, test, review, and change.",
+  "rule": "Feature code should separate UI, orchestration, domain decisions, data mapping, and shared infrastructure. Dependencies point inward toward stable domain concepts, not outward toward screens.",
+  "whenToUse": [
+    "Creating a feature that includes UI, API data, state, and business rules.",
+    "Refactoring components that contain validation, mapping, or permissions logic.",
+    "Reviewing dependency direction between folders."
+  ],
+  "whenNotToUse": [
+    "For tiny static UI with no state, side effects, or business behavior.",
+    "For experiments that have an explicit deletion date."
+  ],
+  "recommended": {
+    "title": "Orchestrate behavior outside the view",
+    "code": "const ProfileScreen = () => {\n  const profile = useProfileScreen()\n\n  return <ProfileView {...profile} />\n}"
+  },
+  "avoid": {
+    "title": "Mix API calls, mapping, and UI",
+    "code": "const ProfileScreen = () => {\n  const [user, setUser] = useState<UserDto | null>(null)\n\n  useEffect(() => {\n    api.getUser().then((dto) => setUser(dto))\n  }, [])\n\n  return <Text>{user?.first_name}</Text>\n}"
+  },
+  "why": "When rendering code owns business rules, every UI change becomes risky. Keeping orchestration and mapping outside views makes code easier to reuse across React and React Native.",
+  "checklist": [
+    "UI renders view models, not raw API DTOs.",
+    "Business rules are testable without rendering a component.",
+    "Shared code does not import feature-specific code.",
+    "Framework-specific details stay near the app boundary."
+  ],
+  "related": [
+    "architecture/project-structure",
+    "state-data/api-layer",
+    "decisions/adr-001-feature-architecture"
+  ]
+}

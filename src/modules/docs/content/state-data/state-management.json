@@ -1,0 +1,43 @@
+{
+  "order": 1,
+  "title": "State Management",
+  "owner": "Application Architecture Lead",
+  "lastUpdated": "2026-04-20",
+  "tags": [
+    "state",
+    "server-state",
+    "client-state"
+  ],
+  "summary": "Choose the smallest state owner that can answer the product need.",
+  "purpose": "State standards prevent global stores from becoming a dumping ground for feature details.",
+  "rule": "Keep local UI state local, server data in the server-state library, cross-feature app state in the approved global store, and domain rules in domain functions.",
+  "whenToUse": [
+    "Choosing between local state, server state, and global state.",
+    "Adding optimistic updates or cache invalidation.",
+    "Reviewing a new store slice."
+  ],
+  "whenNotToUse": [
+    "Do not move state global to avoid prop drilling across one component boundary.",
+    "Do not store raw API DTOs in global state."
+  ],
+  "recommended": {
+    "title": "Pick state by ownership",
+    "code": "const stateOwner = {\n  local: \"open modal, selected tab, draft input\",\n  server: \"profile query, invoice list, cache status\",\n  global: \"session, feature flags, app shell preferences\",\n  domain: \"pricing rule, permission decision, validation\",\n}"
+  },
+  "avoid": {
+    "title": "Put every state in one store",
+    "code": "const useAppStore = create((set) => ({\n  isModalOpen: false,\n  profileResponse: null,\n  invoiceFormDraft: {},\n  selectedInvoiceRow: null,\n  permissionError: null,\n}))"
+  },
+  "why": "State bugs become harder when ownership is unclear. Smaller owners make behavior easier to test and reset.",
+  "checklist": [
+    "The selected state owner matches the state lifetime.",
+    "Server state is cached and invalidated intentionally.",
+    "Global state stores domain meaning, not view implementation.",
+    "Optimistic updates include rollback behavior."
+  ],
+  "related": [
+    "code-standards/hooks",
+    "state-data/api-layer",
+    "feature-development/create-a-feature"
+  ]
+}

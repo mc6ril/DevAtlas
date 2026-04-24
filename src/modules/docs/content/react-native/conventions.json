@@ -1,0 +1,44 @@
+{
+  "order": 1,
+  "title": "React Native Conventions",
+  "owner": "Mobile Lead",
+  "lastUpdated": "2026-04-21",
+  "tags": [
+    "react-native",
+    "mobile",
+    "navigation"
+  ],
+  "summary": "Mobile features follow the same architecture with platform-specific care for navigation, lifecycle, and performance.",
+  "purpose": "React Native standards keep mobile code consistent with web architecture while respecting device constraints.",
+  "rule": "Keep screens thin, centralize navigation contracts, isolate platform-specific code, handle app lifecycle explicitly, and design for offline, permissions, and performance from the start.",
+  "whenToUse": [
+    "Creating a new mobile screen or flow.",
+    "Adding permissions, camera, location, BLE, storage, or background behavior.",
+    "Optimizing lists, images, or app startup."
+  ],
+  "whenNotToUse": [
+    "Do not copy web-only assumptions into mobile screens.",
+    "Do not put native-module calls directly inside presentation components."
+  ],
+  "recommended": {
+    "title": "Screen delegates behavior",
+    "code": "export const DevicePairingScreen = () => {\n  const pairing = useDevicePairingScreen()\n\n  return <DevicePairingView {...pairing} />\n}"
+  },
+  "avoid": {
+    "title": "Native calls inside the view",
+    "code": "export const DevicePairingView = () => {\n  useEffect(() => {\n    BleManager.startScan()\n  }, [])\n\n  return <Text>Searching...</Text>\n}"
+  },
+  "why": "Mobile failures often involve permissions, lifecycle, and device state. Keeping those concerns out of views makes the behavior testable and recoverable.",
+  "checklist": [
+    "Navigation params are typed and owned by the route contract.",
+    "Permissions have granted, denied, blocked, and retry states.",
+    "Long lists use virtualization and stable item keys.",
+    "Platform-specific code is isolated behind a small interface.",
+    "Crash reporting and logging include useful non-sensitive context."
+  ],
+  "related": [
+    "feature-development/create-a-feature",
+    "code-standards/error-handling",
+    "testing/overview"
+  ]
+}

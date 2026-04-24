@@ -1,0 +1,44 @@
+{
+  "order": 1,
+  "title": "Testing Strategy",
+  "owner": "QA Lead",
+  "lastUpdated": "2026-04-21",
+  "tags": [
+    "testing",
+    "quality",
+    "review"
+  ],
+  "summary": "Test behavior at the cheapest layer that gives confidence.",
+  "purpose": "Testing standards make quality expectations explicit before a reviewer has to ask for coverage.",
+  "rule": "Use unit tests for pure logic, component tests for UI states, integration tests for feature flows, and E2E tests for critical paths that must work across the app.",
+  "whenToUse": [
+    "Opening a PR that changes behavior.",
+    "Adding a mapper, validation rule, permission decision, or async flow.",
+    "Fixing a bug that should not regress."
+  ],
+  "whenNotToUse": [
+    "Do not snapshot large rendered trees as the primary assertion.",
+    "Do not test implementation details that users cannot observe."
+  ],
+  "recommended": {
+    "title": "Test user-visible behavior",
+    "code": "it(\"shows a retry action when loading the profile fails\", async () => {\n  server.use(profileErrorHandler)\n\n  render(<ProfileScreen />)\n\n  expect(await screen.findByRole(\"button\", { name: /retry/i })).toBeVisible()\n})"
+  },
+  "avoid": {
+    "title": "Test private implementation details",
+    "code": "it(\"sets isLoading to false\", () => {\n  const state = useProfileStore.getState()\n\n  expect(state.isLoading).toBe(false)\n})"
+  },
+  "why": "Tests should protect behavior people rely on. Implementation-detail tests fail during harmless refactors and miss real regressions.",
+  "checklist": [
+    "Main success path is covered.",
+    "At least one failure or edge path is covered.",
+    "Tests assert behavior, not private internals.",
+    "Mocks match the boundary being tested.",
+    "Bug fixes include regression coverage."
+  ],
+  "related": [
+    "feature-development/create-a-feature",
+    "pr-guide/pull-request-checklist",
+    "state-data/dtos-and-mappers"
+  ]
+}

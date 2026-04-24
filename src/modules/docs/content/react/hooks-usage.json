@@ -1,0 +1,43 @@
+{
+  "order": 2,
+  "title": "Hooks Usage",
+  "owner": "Web Platform Lead",
+  "lastUpdated": "2026-04-15",
+  "tags": [
+    "react",
+    "hooks",
+    "effects"
+  ],
+  "summary": "Effects synchronize with external systems; they are not a default place for derived state.",
+  "purpose": "Hook standards reduce stale state, accidental rerenders, and unclear ownership of side effects.",
+  "rule": "Use effects only to synchronize with external systems. Derive values during render when possible, and keep effect dependencies primitive and complete.",
+  "whenToUse": [
+    "Subscribing to events, timers, browser APIs, or native APIs.",
+    "Synchronizing with imperative libraries.",
+    "Triggering analytics that cannot be sent from an event handler."
+  ],
+  "whenNotToUse": [
+    "Do not mirror props into state just to transform them.",
+    "Do not use effects for work that can happen in event handlers."
+  ],
+  "recommended": {
+    "title": "Derive during render",
+    "code": "const InvoiceList = ({ invoices }: { invoices: Invoice[] }) => {\n  const unpaidInvoices = invoices.filter((invoice) => invoice.status === \"unpaid\")\n\n  return <InvoiceTable invoices={unpaidInvoices} />\n}"
+  },
+  "avoid": {
+    "title": "Mirror derived state with effects",
+    "code": "const InvoiceList = ({ invoices }: { invoices: Invoice[] }) => {\n  const [unpaidInvoices, setUnpaidInvoices] = useState<Invoice[]>([])\n\n  useEffect(() => {\n    setUnpaidInvoices(invoices.filter((invoice) => invoice.status === \"unpaid\"))\n  }, [invoices])\n\n  return <InvoiceTable invoices={unpaidInvoices} />\n}"
+  },
+  "why": "Derived state in effects causes extra renders and stale-data bugs. Rendering from inputs keeps the component easier to reason about.",
+  "checklist": [
+    "Effects synchronize with something outside React.",
+    "Derived values are computed during render or memoized when expensive.",
+    "Dependencies are complete and stable.",
+    "Cleanup exists for subscriptions and timers."
+  ],
+  "related": [
+    "code-standards/hooks",
+    "react/performance",
+    "feature-development/ui-layer"
+  ]
+}

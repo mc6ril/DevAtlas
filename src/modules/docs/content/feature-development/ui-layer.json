@@ -1,0 +1,43 @@
+{
+  "order": 3,
+  "title": "UI Layer",
+  "owner": "Design System Team",
+  "lastUpdated": "2026-04-19",
+  "tags": [
+    "ui",
+    "screens",
+    "separation-of-concerns"
+  ],
+  "summary": "UI components render state and emit intent; they do not own business rules.",
+  "purpose": "The UI layer keeps rendering simple enough to reason about and portable across web and mobile patterns.",
+  "rule": "Screen components compose orchestration hooks with pure views. View components receive explicit props, render states, and call event handlers without importing API clients or domain services.",
+  "whenToUse": [
+    "A component has loading, empty, error, or permission states.",
+    "A view needs to be reused in Storybook or React Native previews.",
+    "A screen is becoming difficult to test."
+  ],
+  "whenNotToUse": [
+    "For a trivial presentational component with no orchestration.",
+    "When framework-specific primitives are the whole point of the component."
+  ],
+  "recommended": {
+    "title": "Pure view with explicit state",
+    "code": "type ProfileViewProps = {\n  user: ProfileViewModel | null\n  isLoading: boolean\n  error: Error | null\n  onRetry: () => void\n}\n\nexport const ProfileView = (props: ProfileViewProps) => {\n  if (props.isLoading) return <LoadingState />\n  if (props.error) return <ErrorState onRetry={props.onRetry} />\n  if (!props.user) return <EmptyState />\n\n  return <ProfileSummary user={props.user} />\n}"
+  },
+  "avoid": {
+    "title": "View imports services",
+    "code": "export const ProfileView = () => {\n  const [user, setUser] = useState<UserDto | null>(null)\n\n  useEffect(() => {\n    profileApi.getProfile().then(setUser)\n  }, [])\n\n  return <ProfileSummary user={user} />\n}"
+  },
+  "why": "Views are easier to test, preview, and reuse when their inputs are explicit. API and business logic belong in orchestration hooks or use-case functions.",
+  "checklist": [
+    "View props are explicit and typed.",
+    "The view handles loading, error, and empty states.",
+    "The view does not import API clients.",
+    "Callbacks describe user intent, not implementation details."
+  ],
+  "related": [
+    "feature-development/create-a-feature",
+    "code-standards/components",
+    "react/component-composition"
+  ]
+}

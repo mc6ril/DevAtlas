@@ -1,0 +1,44 @@
+{
+  "order": 1,
+  "title": "Create A New Feature",
+  "owner": "Feature Platform Lead",
+  "lastUpdated": "2026-04-21",
+  "tags": [
+    "feature",
+    "workflow",
+    "checklist"
+  ],
+  "summary": "Create features by starting with the user flow, then add UI, orchestration, data, and tests.",
+  "purpose": "This guide gives developers a repeatable path from product requirement to review-ready feature code.",
+  "rule": "A feature must include a feature folder, a clear screen or entry point, an orchestration hook, typed data boundaries, loading and error states, analytics where required, and tests for the main behavior.",
+  "whenToUse": [
+    "Building a new screen, flow, or product capability.",
+    "Splitting a large feature into smaller reviewable increments.",
+    "Planning work with a tech lead before implementation."
+  ],
+  "whenNotToUse": [
+    "For a one-line visual tweak.",
+    "For code that belongs to an existing feature and does not change boundaries."
+  ],
+  "recommended": {
+    "title": "Feature creation order",
+    "code": "modules/profile/\n  screens/ProfileScreen.tsx\n  ui/ProfileView.tsx\n  hooks/useProfileScreen.ts\n  api/profile-api.ts\n  mappers/profile-mapper.ts\n  __tests__/profile-screen.test.tsx"
+  },
+  "avoid": {
+    "title": "Start with scattered files",
+    "code": "components/Profile.tsx\nhooks/useUser.ts\nservices/userService.ts\ntypes/profile.ts\nutils/profile.ts"
+  },
+  "why": "The review becomes smaller when reviewers can inspect one feature boundary and see UI, data, and tests together.",
+  "checklist": [
+    "Feature has a clear owner folder.",
+    "UI is separated from orchestration logic.",
+    "Data enters through typed API and mapper boundaries.",
+    "Loading, error, and empty states are visible.",
+    "Tests cover the main user behavior and failure path."
+  ],
+  "related": [
+    "feature-development/folder-structure",
+    "feature-development/ui-layer",
+    "testing/overview"
+  ]
+}

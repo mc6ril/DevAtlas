@@ -1,0 +1,43 @@
+{
+  "order": 3,
+  "title": "DTOs And Mappers",
+  "owner": "Application Architecture Lead",
+  "lastUpdated": "2026-04-18",
+  "tags": [
+    "dto",
+    "mappers",
+    "domain-models"
+  ],
+  "summary": "Map external data into models before product logic uses it.",
+  "purpose": "DTO and mapper standards contain external naming, nullability, and version differences.",
+  "rule": "Keep DTO types close to the API that receives them, map into domain or view models immediately, and test mappers when they contain business meaning.",
+  "whenToUse": [
+    "Backend fields differ from UI or domain language.",
+    "A response contains nullable or optional values.",
+    "A mobile API returns platform-specific shapes."
+  ],
+  "whenNotToUse": [
+    "Do not add a mapper that only renames id to id.",
+    "Do not hide business rules in a mapper without tests."
+  ],
+  "recommended": {
+    "title": "Normalize external data",
+    "code": "export const mapInvoice = (dto: InvoiceDto): Invoice => {\n  return {\n    id: dto.id,\n    number: dto.invoice_number,\n    totalCents: dto.total_cents ?? 0,\n    isOverdue: dto.status === \"overdue\",\n  }\n}"
+  },
+  "avoid": {
+    "title": "Use DTO fields in UI",
+    "code": "<InvoiceRow\n  number={invoice.invoice_number}\n  total={invoice.total_cents}\n  overdue={invoice.status === \"overdue\"}\n/>"
+  },
+  "why": "External data often has transport naming and missing values. Mapping once protects the rest of the app from repeated defensive code.",
+  "checklist": [
+    "DTO type stays near its API module.",
+    "Mapper output uses app language.",
+    "Null and optional fields are handled deliberately.",
+    "Mapper tests cover business-relevant transformations."
+  ],
+  "related": [
+    "state-data/api-layer",
+    "code-standards/typescript",
+    "testing/overview"
+  ]
+}

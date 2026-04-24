@@ -1,0 +1,43 @@
+{
+  "order": 2,
+  "title": "How To Use This Guide",
+  "owner": "Engineering Enablement",
+  "lastUpdated": "2026-04-17",
+  "tags": [
+    "onboarding",
+    "search",
+    "reviews"
+  ],
+  "summary": "Find the standard first, then copy the pattern and run the checklist.",
+  "purpose": "This page explains the daily workflow for using the documentation during implementation and code review.",
+  "rule": "Use the guide by intent: start with the role shortcuts, search for the task, copy the closest recipe, then check the review criteria before opening a PR.",
+  "whenToUse": [
+    "You are building something you have built before, but want the company version.",
+    "You are unsure whether code belongs in shared, domain, module, or presentation layers.",
+    "You want to make review feedback objective."
+  ],
+  "whenNotToUse": [
+    "When a production incident requires immediate mitigation before documentation.",
+    "When the local code has intentionally diverged and the owner has not reconciled the docs yet."
+  ],
+  "recommended": {
+    "title": "Use the guide before opening a PR",
+    "code": "const beforeOpeningPr = [\n  \"feature structure matches the guide\",\n  \"business logic is outside UI components\",\n  \"errors, loading, and empty states are handled\",\n  \"tests cover the main behavior\",\n]"
+  },
+  "avoid": {
+    "title": "Treat docs as an afterthought",
+    "code": "const afterReviewStarts = [\n  \"ask reviewers what pattern they prefer\",\n  \"rewrite structure during review\",\n  \"add tests after the final approval\",\n]"
+  },
+  "why": "The guide is most valuable before code review. It keeps decisions small, visible, and tied to standards instead of personal taste.",
+  "checklist": [
+    "Search by task before creating a new pattern.",
+    "Use a recipe when one exists.",
+    "Link standards in PR descriptions when the change is architectural.",
+    "Update docs when the codebase evolves."
+  ],
+  "related": [
+    "feature-development/create-a-feature",
+    "recipes/index",
+    "pr-guide/reviewer-checklist"
+  ]
+}

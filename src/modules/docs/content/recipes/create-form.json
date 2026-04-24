@@ -1,0 +1,44 @@
+{
+  "order": 3,
+  "title": "Recipe: Create A Form",
+  "owner": "Developer Experience",
+  "lastUpdated": "2026-04-19",
+  "tags": [
+    "recipe",
+    "forms",
+    "validation"
+  ],
+  "summary": "Forms should keep validation explicit and submission behavior recoverable.",
+  "purpose": "This recipe standardizes how teams structure form state, validation, errors, and submit behavior.",
+  "rule": "A form should define typed values, validation rules, submit states, field-level errors, and a retry-safe submit path.",
+  "whenToUse": [
+    "Creating a form with validation or async submission.",
+    "Handling server-side validation errors.",
+    "Adding React Native forms with keyboard and accessibility concerns."
+  ],
+  "whenNotToUse": [
+    "Do not introduce a form library for a single uncontrolled search input.",
+    "Do not hide validation rules in UI copy only."
+  ],
+  "recommended": {
+    "title": "Typed submit contract",
+    "code": "type ProfileFormValues = {\n  displayName: string\n  email: string\n}\n\nconst submitProfile = async (values: ProfileFormValues) => {\n  const result = validateProfile(values)\n  if (!result.ok) return result\n\n  return updateProfile(values)\n}"
+  },
+  "avoid": {
+    "title": "Unstructured submit path",
+    "code": "const onSubmit = async (event: any) => {\n  event.preventDefault()\n  await api.save(event.target)\n  alert(\"saved\")\n}"
+  },
+  "why": "Forms are a common source of regressions because validation, error handling, and async state interact. Typed contracts make that interaction reviewable.",
+  "checklist": [
+    "Form values are typed.",
+    "Client and server validation errors have display states.",
+    "Submit button handles pending and retry states.",
+    "Keyboard and accessibility behavior is verified.",
+    "Tests cover valid submit and validation failure."
+  ],
+  "related": [
+    "code-standards/typescript",
+    "code-standards/error-handling",
+    "testing/overview"
+  ]
+}

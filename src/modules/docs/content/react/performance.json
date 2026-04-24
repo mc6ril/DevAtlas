@@ -1,0 +1,43 @@
+{
+  "order": 3,
+  "title": "React Performance",
+  "owner": "Web Platform Lead",
+  "lastUpdated": "2026-04-15",
+  "tags": [
+    "react",
+    "performance",
+    "bundle-size"
+  ],
+  "summary": "Optimize by reducing shipped JavaScript, avoiding waterfalls, and keeping rerenders local.",
+  "purpose": "Performance standards keep apps responsive without adding premature memoization everywhere.",
+  "rule": "Start with server rendering where available, direct imports, parallel data loading, small client boundaries, and memoization only around measured expensive work.",
+  "whenToUse": [
+    "Adding client-only interactivity to a mostly static page.",
+    "Importing heavy libraries or shared barrels.",
+    "Fixing slow screens, long lists, or expensive derived values."
+  ],
+  "whenNotToUse": [
+    "Do not add memoization before there is a clear reason.",
+    "Do not convert a full route to a client component for one input or button."
+  ],
+  "recommended": {
+    "title": "Keep client boundaries small",
+    "code": "// Server component\nconst DocsPage = () => {\n  return (\n    <DocsLayout>\n      <SearchCommand documents={searchableDocs} />\n      <StaticArticle />\n    </DocsLayout>\n  )\n}\n\nexport default DocsPage"
+  },
+  "avoid": {
+    "title": "Ship a whole route as client code",
+    "code": "\"use client\"\n\nconst DocsPage = () => {\n  const [query, setQuery] = useState(\"\")\n\n  return <FullDocumentationApp query={query} onQueryChange={setQuery} />\n}\n\nexport default DocsPage"
+  },
+  "why": "Small client boundaries keep hydration work low and make pages faster to load. Direct imports also reduce accidental bundle growth.",
+  "checklist": [
+    "Interactive code is isolated to the smallest component that needs it.",
+    "Independent async work starts in parallel.",
+    "Heavy modules are imported only where they are used.",
+    "Memoization protects measured expensive work, not every render."
+  ],
+  "related": [
+    "react/hooks-usage",
+    "code-standards/imports",
+    "feature-development/ui-layer"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "order": 2,
+  "title": "API Layer",
+  "owner": "Application Architecture Lead",
+  "lastUpdated": "2026-04-20",
+  "tags": [
+    "api",
+    "dto",
+    "mappers"
+  ],
+  "summary": "The API layer owns transport details and converts data into app models.",
+  "purpose": "API standards keep backend contracts from leaking into UI and domain code.",
+  "rule": "API functions return typed DTOs or mapped results, handle transport errors consistently, and keep HTTP details behind feature or domain data access modules.",
+  "whenToUse": [
+    "Calling REST, GraphQL, native bridge APIs, or backend-for-frontend endpoints.",
+    "Adding caching, retries, or optimistic updates.",
+    "Mapping backend fields into UI-ready models."
+  ],
+  "whenNotToUse": [
+    "Do not call fetch or API clients directly from a view component.",
+    "Do not let backend field names become UI prop names."
+  ],
+  "recommended": {
+    "title": "Map at the boundary",
+    "code": "export const getProfile = async (): Promise<Profile> => {\n  const dto = await http.get<ProfileDto>(\"/profile\")\n\n  return mapProfile(dto)\n}"
+  },
+  "avoid": {
+    "title": "Return raw response to the screen",
+    "code": "export const getProfile = async () => {\n  return fetch(\"/profile\").then((response) => response.json())\n}"
+  },
+  "why": "A clean API boundary lets backend contracts evolve without forcing UI rewrites. It also gives tests one place to verify mapping behavior.",
+  "checklist": [
+    "API calls are typed at input and output.",
+    "DTOs are mapped before reaching UI components.",
+    "Transport errors are converted to app errors.",
+    "Retries and cache invalidation are intentional."
+  ],
+  "related": [
+    "code-standards/typescript",
+    "code-standards/error-handling",
+    "state-data/state-management"
+  ]
+}

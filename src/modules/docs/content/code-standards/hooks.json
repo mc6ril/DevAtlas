@@ -1,0 +1,43 @@
+{
+  "order": 2,
+  "title": "Hook Conventions",
+  "owner": "Frontend Guild",
+  "lastUpdated": "2026-04-22",
+  "tags": [
+    "hooks",
+    "orchestration",
+    "state"
+  ],
+  "summary": "Hooks orchestrate behavior and return view-ready state.",
+  "purpose": "Custom hooks give screens a clean boundary for side effects, derived state, and event handlers.",
+  "rule": "Use custom hooks for orchestration. Return a small view model, booleans for view states, and stable callbacks with functional updates when state depends on previous state.",
+  "whenToUse": [
+    "A screen coordinates API data, local state, analytics, or navigation.",
+    "The same behavior is needed by multiple components.",
+    "A component is hard to test because side effects are mixed into rendering."
+  ],
+  "whenNotToUse": [
+    "Do not create a hook that only wraps one useState without adding meaning.",
+    "Do not hide rendering decisions inside hooks."
+  ],
+  "recommended": {
+    "title": "Return view-ready state",
+    "code": "export const useProfileScreen = () => {\n  const profileQuery = useProfileQuery()\n\n  return {\n    user: profileQuery.data ?? null,\n    isLoading: profileQuery.isLoading,\n    error: profileQuery.error,\n    onRetry: profileQuery.refetch,\n  }\n}"
+  },
+  "avoid": {
+    "title": "Return raw implementation details",
+    "code": "export const useProfileScreen = () => {\n  const query = useQuery({\n    queryKey: [\"profile\"],\n    queryFn: profileApi.getProfile,\n  })\n\n  return query\n}"
+  },
+  "why": "Screens should not know every detail of the state library. Hooks translate implementation details into the contract a view needs.",
+  "checklist": [
+    "Hook name starts with use and describes behavior.",
+    "Return value is narrow and view-ready.",
+    "Effects list primitive dependencies where possible.",
+    "Callbacks use functional state updates when needed."
+  ],
+  "related": [
+    "code-standards/components",
+    "state-data/state-management",
+    "react/hooks-usage"
+  ]
+}

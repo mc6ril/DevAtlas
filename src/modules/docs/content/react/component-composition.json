@@ -1,0 +1,43 @@
+{
+  "order": 1,
+  "title": "Component Composition",
+  "owner": "Web Platform Lead",
+  "lastUpdated": "2026-04-17",
+  "tags": [
+    "react",
+    "composition",
+    "props"
+  ],
+  "summary": "Prefer composition over prop combinations that create hidden component modes.",
+  "purpose": "Composition makes React components easier to extend without turning props into a private configuration language.",
+  "rule": "Use children, slots, and small named components for variation. Add boolean props only for simple, independent states.",
+  "whenToUse": [
+    "A component has multiple optional areas or layout variants.",
+    "Boolean props are starting to interact with each other.",
+    "A design system component needs predictable extension points."
+  ],
+  "whenNotToUse": [
+    "Do not use composition to avoid a simple prop that is clear and stable.",
+    "Do not expose internal layout details as arbitrary render props."
+  ],
+  "recommended": {
+    "title": "Use named composition points",
+    "code": "<Panel>\n  <Panel.Header title=\"Billing\" />\n  <Panel.Body>\n    <BillingSummary />\n  </Panel.Body>\n  <Panel.Footer>\n    <InvoiceActions />\n  </Panel.Footer>\n</Panel>"
+  },
+  "avoid": {
+    "title": "Create prop combinations",
+    "code": "<Panel\n  title=\"Billing\"\n  showHeader\n  showFooter\n  footerType=\"invoice\"\n  renderActions\n  compact={false}\n/>"
+  },
+  "why": "Composition keeps variation visible at the call site. Reviewers can see what the component renders without learning every mode.",
+  "checklist": [
+    "Variation is visible at the call site.",
+    "Boolean props are simple and independent.",
+    "Children are used for meaningful layout extension.",
+    "The component still owns its accessibility contract."
+  ],
+  "related": [
+    "code-standards/components",
+    "ui-design-system/component-library",
+    "react/performance"
+  ]
+}

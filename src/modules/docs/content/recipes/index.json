@@ -1,0 +1,43 @@
+{
+  "order": 1,
+  "title": "Recipes Index",
+  "owner": "Developer Experience",
+  "lastUpdated": "2026-04-19",
+  "tags": [
+    "recipes",
+    "examples",
+    "copy-paste"
+  ],
+  "summary": "Use recipes for the common jobs developers repeat every week.",
+  "purpose": "Recipes provide practical starting points that already follow the standards.",
+  "rule": "Start from the closest recipe when building common flows. Adapt names and domain details, but preserve the architectural boundary unless the feature owner approves a different pattern.",
+  "whenToUse": [
+    "Creating a screen, form, reusable component, data fetch, modal, navigation entry, analytics event, permission request, or test.",
+    "Onboarding a developer with a concrete task.",
+    "Reducing repeated PR feedback."
+  ],
+  "whenNotToUse": [
+    "Do not copy a recipe blindly when the feature has a different data or lifecycle model.",
+    "Do not treat recipes as a substitute for understanding the relevant standard."
+  ],
+  "recommended": {
+    "title": "Recipe workflow",
+    "code": "const recipeWorkflow = [\n  \"open the closest recipe\",\n  \"copy the folder and file shape\",\n  \"rename with feature language\",\n  \"run the page checklist\",\n  \"link the recipe in the PR\",\n]"
+  },
+  "avoid": {
+    "title": "Start from memory",
+    "code": "const improvisedWorkflow = [\n  \"create files wherever they feel convenient\",\n  \"wait for review comments\",\n  \"retrofit the structure later\",\n]"
+  },
+  "why": "Recipes lower the cost of following standards. They make the paved path faster than improvising.",
+  "checklist": [
+    "Closest recipe was checked before implementation.",
+    "Copied code was renamed into product language.",
+    "Relevant standard page was checked.",
+    "Recipe gaps were reported or updated."
+  ],
+  "related": [
+    "recipes/create-screen",
+    "recipes/create-form",
+    "recipes/fetch-data"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "order": 2,
+  "title": "Reviewer Checklist",
+  "owner": "Engineering Manager",
+  "lastUpdated": "2026-04-22",
+  "tags": [
+    "review",
+    "checklist",
+    "quality"
+  ],
+  "summary": "Review behavior, boundaries, maintainability, and tests using shared criteria.",
+  "purpose": "Reviewer standards make feedback consistent and reduce personal preference debates.",
+  "rule": "Reviewers should anchor comments in user behavior, architecture boundaries, code standards, test confidence, and maintainability. Link docs for repeated patterns.",
+  "whenToUse": [
+    "Reviewing feature PRs.",
+    "Giving repeated feedback that should become a standard.",
+    "Deciding whether to request changes or leave a suggestion."
+  ],
+  "whenNotToUse": [
+    "Do not block a PR on undocumented style preference.",
+    "Do not request large rewrites without explaining the risk."
+  ],
+  "recommended": {
+    "title": "Actionable review comment",
+    "code": "This screen calls the API from the view, which makes loading and retry behavior hard to test.\nPlease move the API call into an orchestration hook and pass view-ready props.\nRelated standard: /docs/feature-development/ui-layer"
+  },
+  "avoid": {
+    "title": "Preference without standard",
+    "code": "I would not do it this way.\nCan you restructure this?"
+  },
+  "why": "Actionable feedback helps authors improve the code and learn the standard at the same time.",
+  "checklist": [
+    "The PR purpose is clear and appropriately small.",
+    "Architecture boundaries are respected.",
+    "Naming and types communicate intent.",
+    "Errors, loading, and empty states are handled.",
+    "Tests cover meaningful behavior.",
+    "Repeated feedback is linked to documentation or proposed as a doc update."
+  ],
+  "related": [
+    "pr-guide/pull-request-checklist",
+    "getting-started/introduction",
+    "testing/overview"
+  ]
+}

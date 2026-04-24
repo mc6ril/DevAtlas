@@ -1,0 +1,6 @@
+{
+  "order": 8,
+  "title": "State & Data",
+  "description": "Client state, server state, API boundaries, models, and mappers.",
+  "owner": "Application Architecture Lead"
+}

@@ -1,0 +1,43 @@
+{
+  "order": 5,
+  "title": "Import Rules",
+  "owner": "Frontend Guild",
+  "lastUpdated": "2026-04-16",
+  "tags": [
+    "imports",
+    "dependencies",
+    "boundaries"
+  ],
+  "summary": "Imports should make dependency direction visible.",
+  "purpose": "Import rules help reviewers catch architecture drift before it becomes folder entropy.",
+  "rule": "Import directly from the file that owns the contract. Avoid broad barrel files for feature internals and never import from a higher-level product layer into a lower-level shared layer.",
+  "whenToUse": [
+    "Adding a dependency between app, modules, domains, presentation, or shared.",
+    "Creating public entry points for a feature.",
+    "Reviewing circular dependencies or bundle growth."
+  ],
+  "whenNotToUse": [
+    "Do not create public exports for private feature implementation.",
+    "Do not use path aliases to hide invalid dependency direction."
+  ],
+  "recommended": {
+    "title": "Import stable contracts directly",
+    "code": "import { formatCurrency } from \"@/shared/format-currency\"\nimport { InvoiceSummary } from \"@/modules/invoices/ui/InvoiceSummary\""
+  },
+  "avoid": {
+    "title": "Import from broad barrels",
+    "code": "import { formatCurrency, InvoiceSummary, useInvoiceQuery } from \"@/\""
+  },
+  "why": "Direct imports make ownership and bundle impact easier to see. Broad barrels can accidentally pull unrelated code into a client bundle.",
+  "checklist": [
+    "Import path reflects the owner of the contract.",
+    "Shared code does not import modules or app code.",
+    "Feature internals are not exported through broad barrels.",
+    "Circular dependencies are removed before merge."
+  ],
+  "related": [
+    "architecture/project-structure",
+    "feature-development/folder-structure",
+    "react/performance"
+  ]
+}

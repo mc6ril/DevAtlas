@@ -1,0 +1,43 @@
+{
+  "order": 3,
+  "title": "TypeScript Conventions",
+  "owner": "Frontend Guild",
+  "lastUpdated": "2026-04-22",
+  "tags": [
+    "typescript",
+    "types",
+    "models"
+  ],
+  "summary": "Types should describe contracts at boundaries and avoid leaking external shapes.",
+  "purpose": "TypeScript standards make data contracts explicit and protect the app from API and platform drift.",
+  "rule": "Use explicit types at boundaries, domain models for business logic, DTO types for transport shapes, and narrow unions for known states.",
+  "whenToUse": [
+    "Creating API responses, mappers, feature props, or domain models.",
+    "Handling states with more than a boolean branch.",
+    "Replacing any, Function, or broad object types."
+  ],
+  "whenNotToUse": [
+    "Do not duplicate obvious local inference in tiny pure functions.",
+    "Do not create exported types that are used by only one private implementation detail."
+  ],
+  "recommended": {
+    "title": "Separate DTOs from domain models",
+    "code": "type UserDto = {\n  id: string\n  first_name: string\n  last_name: string\n}\n\ntype User = {\n  id: string\n  fullName: string\n}\n\nconst mapUser = (dto: UserDto): User => {\n  return {\n    id: dto.id,\n    fullName: [dto.first_name, dto.last_name].join(\" \"),\n  }\n}"
+  },
+  "avoid": {
+    "title": "Use transport types everywhere",
+    "code": "const UserHeader = ({ user }: { user: any }) => {\n  return <Text>{user.first_name}</Text>\n}"
+  },
+  "why": "External contracts change for reasons the UI does not control. Mappers and explicit models keep those changes contained.",
+  "checklist": [
+    "Boundary data has explicit input and output types.",
+    "DTOs do not leak into UI components.",
+    "Known states use unions instead of stringly typed values.",
+    "No any or Function types without a documented exception."
+  ],
+  "related": [
+    "state-data/api-layer",
+    "state-data/dtos-and-mappers",
+    "code-standards/components"
+  ]
+}

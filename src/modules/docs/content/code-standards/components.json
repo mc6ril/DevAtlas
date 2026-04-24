@@ -1,0 +1,43 @@
+{
+  "order": 1,
+  "title": "Component Conventions",
+  "owner": "Frontend Guild",
+  "lastUpdated": "2026-04-22",
+  "tags": [
+    "components",
+    "props",
+    "composition"
+  ],
+  "summary": "Components should be named by responsibility and accept explicit, narrow props.",
+  "purpose": "Component conventions keep UI code readable, searchable, and easy to review across teams.",
+  "rule": "Use PascalCase component names, explicit prop types, composition for variation, and stable callback names based on user intent.",
+  "whenToUse": [
+    "Creating a screen, feature view, or reusable component.",
+    "Refactoring a component with broad boolean props.",
+    "Reviewing whether a component should belong to the design system."
+  ],
+  "whenNotToUse": [
+    "Do not extract a component just to reduce line count.",
+    "Do not make a component generic before there are real reuse cases."
+  ],
+  "recommended": {
+    "title": "Name props by intent",
+    "code": "type InvoiceActionsProps = {\n  canApprove: boolean\n  onApprove: () => void\n  onReject: () => void\n}\n\nexport const InvoiceActions = (props: InvoiceActionsProps) => {\n  return (\n    <ActionBar>\n      <Button disabled={!props.canApprove} onClick={props.onApprove}>\n        Approve\n      </Button>\n      <Button variant=\"secondary\" onClick={props.onReject}>\n        Reject\n      </Button>\n    </ActionBar>\n  )\n}"
+  },
+  "avoid": {
+    "title": "Leak implementation through props",
+    "code": "type Props = {\n  data: any\n  disabled: boolean\n  type: string\n  callback: Function\n}"
+  },
+  "why": "Reviewers should understand a component's contract from its props. Intent-based names preserve meaning as internals change.",
+  "checklist": [
+    "Component name describes responsibility.",
+    "Props type is explicit and exported only when reused.",
+    "Boolean props do not create many hidden variants.",
+    "Callbacks are named by user intent."
+  ],
+  "related": [
+    "feature-development/ui-layer",
+    "react/component-composition",
+    "ui-design-system/component-library"
+  ]
+}

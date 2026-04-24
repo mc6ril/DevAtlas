@@ -1,0 +1,43 @@
+{
+  "order": 2,
+  "title": "Recipe: Create A Screen",
+  "owner": "Developer Experience",
+  "lastUpdated": "2026-04-19",
+  "tags": [
+    "recipe",
+    "screen",
+    "feature"
+  ],
+  "summary": "Create a screen with a thin entry point, orchestration hook, and pure view.",
+  "purpose": "This recipe gives a copy-ready starting point for a new feature screen.",
+  "rule": "A screen file should connect routing or navigation to a feature hook and view. It should not contain API calls, mapping logic, or complex rendering branches.",
+  "whenToUse": [
+    "Adding a web page, mobile screen, or nested feature route.",
+    "Splitting a large screen into orchestration and presentation.",
+    "Creating a screen that needs loading, error, and empty states."
+  ],
+  "whenNotToUse": [
+    "Do not split a static two-line component for ceremony.",
+    "Do not put shared UI components inside the screen folder by default."
+  ],
+  "recommended": {
+    "title": "Screen shell",
+    "code": "export const AccountScreen = () => {\n  const account = useAccountScreen()\n\n  return <AccountView {...account} />\n}"
+  },
+  "avoid": {
+    "title": "Screen owns everything",
+    "code": "export const AccountScreen = () => {\n  const [account, setAccount] = useState<AccountDto | null>(null)\n\n  useEffect(() => {\n    accountApi.getAccount().then(setAccount)\n  }, [])\n\n  return <AccountDetails account={account} />\n}"
+  },
+  "why": "A thin screen gives reviewers one place to inspect behavior and one place to inspect rendering.",
+  "checklist": [
+    "Screen delegates behavior to a hook.",
+    "View receives explicit props.",
+    "Loading, error, empty, and success states are visible.",
+    "Tests cover the screen behavior."
+  ],
+  "related": [
+    "feature-development/create-a-feature",
+    "feature-development/ui-layer",
+    "code-standards/hooks"
+  ]
+}

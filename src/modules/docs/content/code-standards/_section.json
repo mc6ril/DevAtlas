@@ -1,0 +1,6 @@
+{
+  "order": 4,
+  "title": "Code Standards",
+  "description": "Naming, components, hooks, TypeScript, imports, and errors.",
+  "owner": "Frontend Guild"
+}

@@ -1,0 +1,43 @@
+{
+  "order": 4,
+  "title": "Error Handling",
+  "owner": "Frontend Guild",
+  "lastUpdated": "2026-04-18",
+  "tags": [
+    "errors",
+    "async",
+    "review"
+  ],
+  "summary": "Handle errors deliberately at the boundary where the user can recover.",
+  "purpose": "Error standards keep failures observable, testable, and understandable for users and reviewers.",
+  "rule": "Convert unknown failures into typed app errors at boundaries, render recoverable states in the UI, and log only the context that helps debugging without exposing sensitive data.",
+  "whenToUse": [
+    "Calling APIs, native modules, permissions, storage, or analytics.",
+    "Rendering screens with async dependencies.",
+    "Adding retry, fallback, or offline behavior."
+  ],
+  "whenNotToUse": [
+    "Do not swallow errors because the UI has no design yet.",
+    "Do not show raw backend messages directly to users."
+  ],
+  "recommended": {
+    "title": "Map failures before rendering",
+    "code": "const loadProfile = async (): Promise<Result<Profile, AppError>> => {\n  try {\n    const dto = await profileApi.getProfile()\n    return ok(mapProfile(dto))\n  } catch (error) {\n    return err(toAppError(error))\n  }\n}"
+  },
+  "avoid": {
+    "title": "Let unknown errors leak",
+    "code": "const loadProfile = async () => {\n  const response = await fetch(\"/api/profile\")\n  return response.json()\n}"
+  },
+  "why": "A consistent error boundary prevents each feature from inventing its own failure language. It also gives QA predictable states to verify.",
+  "checklist": [
+    "Async failures are mapped to app-level errors.",
+    "User-facing copy is safe and actionable.",
+    "Retry exists where recovery is possible.",
+    "Tests cover at least one failure path."
+  ],
+  "related": [
+    "state-data/api-layer",
+    "feature-development/create-a-feature",
+    "testing/overview"
+  ]
+}

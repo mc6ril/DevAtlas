@@ -1,0 +1,44 @@
+{
+  "order": 1,
+  "title": "Why This Documentation Exists",
+  "owner": "Engineering Enablement",
+  "lastUpdated": "2026-04-18",
+  "tags": [
+    "onboarding",
+    "standards",
+    "operating-manual"
+  ],
+  "summary": "Use this site as the operating manual for company React and React Native code.",
+  "purpose": "This documentation turns recurring architecture, implementation, and review expectations into one shared source of truth.",
+  "rule": "Before introducing a new pattern, changing an existing one, or debating a repeated review comment, update or link the relevant standard.",
+  "whenToUse": [
+    "Starting work in an unfamiliar area of the codebase.",
+    "Opening a pull request that follows a company pattern.",
+    "Reviewing code and needing an agreed reference.",
+    "Onboarding a developer, contractor, QA engineer, or product engineer."
+  ],
+  "whenNotToUse": [
+    "As a replacement for reading the actual code near the feature.",
+    "As a place for team-specific secrets, roadmap details, or temporary project notes."
+  ],
+  "recommended": {
+    "title": "Link standards from review comments",
+    "code": "// Recommended review comment\nThis component is doing data fetching and rendering.\nPlease follow the UI layer guide:\n/docs/feature-development/ui-layer"
+  },
+  "avoid": {
+    "title": "Repeat undocumented preferences",
+    "code": "// Avoid\nI do not like this structure.\nCan you move things around until it looks more like the rest?"
+  },
+  "why": "Teams move faster when standards are concrete, searchable, and reviewable. The goal is not more rules; the goal is fewer repeated conversations and fewer surprising pull request comments.",
+  "checklist": [
+    "The relevant standard is linked when it affects review feedback.",
+    "New patterns include examples before they are enforced.",
+    "Owners are clear for each documentation section.",
+    "Outdated guidance is updated or marked for revision."
+  ],
+  "related": [
+    "getting-started/how-to-use-this-guide",
+    "pr-guide/pull-request-checklist",
+    "decisions/adr-001-feature-architecture"
+  ]
+}

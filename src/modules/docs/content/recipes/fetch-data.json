@@ -1,0 +1,44 @@
+{
+  "order": 4,
+  "title": "Recipe: Fetch Data",
+  "owner": "Developer Experience",
+  "lastUpdated": "2026-04-19",
+  "tags": [
+    "recipe",
+    "api",
+    "server-state"
+  ],
+  "summary": "Fetch through a typed API boundary and expose view-ready state.",
+  "purpose": "This recipe provides the default path for loading data without leaking transport details into UI.",
+  "rule": "Fetch data through an API module, map the response, expose server-state through a hook, and render loading, error, empty, and success states.",
+  "whenToUse": [
+    "Loading data for a feature screen.",
+    "Adding retries or cache invalidation.",
+    "Replacing a direct fetch from a component."
+  ],
+  "whenNotToUse": [
+    "Do not use server-state machinery for static constants.",
+    "Do not fetch from views that should stay pure."
+  ],
+  "recommended": {
+    "title": "Data loading flow",
+    "code": "export const useInvoicesScreen = () => {\n  const invoices = useInvoicesQuery()\n\n  return {\n    invoices: invoices.data ?? [],\n    isLoading: invoices.isLoading,\n    error: invoices.error,\n    onRetry: invoices.refetch,\n  }\n}"
+  },
+  "avoid": {
+    "title": "Fetch directly in a view",
+    "code": "export const InvoicesView = () => {\n  const [invoices, setInvoices] = useState([])\n\n  useEffect(() => {\n    fetch(\"/api/invoices\")\n      .then((response) => response.json())\n      .then(setInvoices)\n  }, [])\n\n  return <InvoiceTable invoices={invoices} />\n}"
+  },
+  "why": "A standard data flow gives each feature the same failure language and makes cache behavior easier to reason about.",
+  "checklist": [
+    "API module owns transport details.",
+    "Mapper converts DTOs before UI.",
+    "Hook returns view-ready state.",
+    "View renders loading, error, empty, and success states.",
+    "Tests cover success and failure."
+  ],
+  "related": [
+    "state-data/api-layer",
+    "state-data/state-management",
+    "feature-development/ui-layer"
+  ]
+}

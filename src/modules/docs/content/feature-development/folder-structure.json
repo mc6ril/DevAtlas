@@ -1,0 +1,43 @@
+{
+  "order": 2,
+  "title": "Feature Folder Structure",
+  "owner": "Feature Platform Lead",
+  "lastUpdated": "2026-04-19",
+  "tags": [
+    "feature-folders",
+    "modules",
+    "ownership"
+  ],
+  "summary": "A feature folder groups the files needed to build, test, and review one product capability.",
+  "purpose": "Feature folders reduce review friction by putting related implementation details in one predictable place.",
+  "rule": "Each feature folder may contain screens, ui, hooks, api, mappers, state, permissions, analytics, and tests. Add folders only when the feature needs them.",
+  "whenToUse": [
+    "A feature has more than one implementation file.",
+    "A capability has product ownership and a review boundary.",
+    "A screen needs orchestration beyond basic rendering."
+  ],
+  "whenNotToUse": [
+    "Do not create every possible subfolder up front.",
+    "Do not hide shared design system components inside a feature folder."
+  ],
+  "recommended": {
+    "title": "Add folders when they earn their place",
+    "code": "modules/search/\n  screens/SearchScreen.tsx\n  ui/SearchResults.tsx\n  hooks/useSearchScreen.ts\n  api/search-api.ts\n  mappers/search-result-mapper.ts\n  __tests__/search-screen.test.tsx"
+  },
+  "avoid": {
+    "title": "Create empty architecture theater",
+    "code": "modules/search/\n  actions/\n  adapters/\n  controllers/\n  entities/\n  factories/\n  gateways/\n  presenters/\n  repositories/\n  services/\n  use-cases/"
+  },
+  "why": "The structure should make the next file obvious. Empty folders make architecture look heavier than it is and discourage small PRs.",
+  "checklist": [
+    "Folder names match the feature language used by product and QA.",
+    "Only required subfolders exist.",
+    "Tests live near the feature they protect.",
+    "Feature exports do not expose internal implementation details by default."
+  ],
+  "related": [
+    "feature-development/create-a-feature",
+    "architecture/project-structure",
+    "code-standards/imports"
+  ]
+}

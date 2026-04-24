@@ -1,0 +1,43 @@
+{
+  "order": 1,
+  "title": "ADR 001: Feature Architecture",
+  "owner": "Architecture Council",
+  "lastUpdated": "2026-04-14",
+  "tags": [
+    "adr",
+    "architecture",
+    "feature-folders"
+  ],
+  "summary": "We use feature-first architecture because review and ownership follow product capabilities.",
+  "purpose": "This decision record explains why the company standard favors feature folders over file-type folders.",
+  "rule": "Product behavior belongs in feature folders. Shared code must be stable, domain-neutral, and intentionally promoted.",
+  "whenToUse": [
+    "Debating whether new code belongs in modules, domains, presentation, or shared.",
+    "Reviewing a PR that introduces broad shared helpers.",
+    "Onboarding developers from codebases organized by file type."
+  ],
+  "whenNotToUse": [
+    "Do not use this ADR to force unnecessary folders into tiny changes.",
+    "Do not treat the current structure as permanent when evidence shows a better boundary."
+  ],
+  "recommended": {
+    "title": "Decision summary",
+    "code": "decision: \"Use feature-first modules\"\nbecause:\n  - ownership follows product behavior\n  - review boundaries stay small\n  - shared code is promoted intentionally\ntradeoffs:\n  - some duplication is acceptable before abstraction\n  - feature names need active stewardship"
+  },
+  "avoid": {
+    "title": "Premature shared abstractions",
+    "code": "shared/\n  api/\n  hooks/\n  models/\n  screens/\n  everything-else/"
+  },
+  "why": "The company optimizes for maintainable product delivery. Feature-first architecture gives teams a clear place to work and reviewers a clear boundary to evaluate.",
+  "checklist": [
+    "Feature code has a clear product owner.",
+    "Shared promotion has at least two stable consumers.",
+    "Duplication is tolerated until the abstraction is obvious.",
+    "Architecture changes update this ADR or add a new one."
+  ],
+  "related": [
+    "architecture/overview",
+    "architecture/project-structure",
+    "feature-development/folder-structure"
+  ]
+}
