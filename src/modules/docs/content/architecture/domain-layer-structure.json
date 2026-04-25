@@ -1,0 +1,48 @@
+{
+  "order": 4,
+  "title": "Domain Layer Structure",
+  "owner": "Frontend Tech Lead",
+  "lastUpdated": "2026-04-25",
+  "tags": [
+    "domains",
+    "use-cases",
+    "business-rules"
+  ],
+  "summary": "Use domains for business concepts that must survive UI, API, and platform changes.",
+  "purpose": "The domain layer gives business rules a stable home outside screens, hooks, API clients, and native adapters.",
+  "rule": "Create a domain when the code expresses product language, business rules, permissions, calculations, or workflows reused by multiple features. Organize it around core models, use cases, and ports.",
+  "whenToUse": [
+    "A rule is shared by multiple features.",
+    "A calculation, permission, validation, or workflow must be tested without React.",
+    "A backend DTO shape is not the same as the business concept.",
+    "A feature needs the same business decision on web and mobile."
+  ],
+  "whenNotToUse": [
+    "Do not create a domain for purely visual state.",
+    "Do not move a rule into domains before it has stable product language.",
+    "Do not let a domain import UI components, screens, navigation, API clients, or storage implementations.",
+    "Do not create abstract folders that contain only one trivial file."
+  ],
+  "recommended": {
+    "title": "Domain folder with clear responsibilities",
+    "code": "src/domains/billing/\n  core/\n    invoice.ts\n    invoice-status.ts\n    billing-errors.ts\n  use-cases/\n    calculate-invoice-total.ts\n    can-approve-invoice.ts\n    mark-invoice-as-paid.ts\n  ports/\n    invoice-repository.ts\n    billing-analytics.ts\n  tests/\n    can-approve-invoice.test.ts"
+  },
+  "avoid": {
+    "title": "Domain folder that imports delivery details",
+    "code": "src/domains/billing/\n  calculate-invoice-total.ts\n  approve-button.tsx\n  billing-api.ts\n  navigation.ts\n\n// The domain now depends on React, HTTP, and navigation."
+  },
+  "why": "The domain layer is about ownership of meaning. Core files define the language: entities, value objects, states, errors, and pure rules. Use cases express business actions in application language. Ports describe what the domain needs from the outside world without choosing how it is implemented. This lets a feature call a business action while infrastructure supplies HTTP, storage, analytics, or native behavior behind a contract.",
+  "checklist": [
+    "Domain names match product and business language.",
+    "Core rules are pure and testable without React.",
+    "Use cases coordinate domain decisions without importing UI.",
+    "Ports describe required capabilities, not implementation details.",
+    "The domain does not import modules, presentation, app, or infrastructure implementations."
+  ],
+  "related": [
+    "architecture/overview",
+    "architecture/feature-based-clean-architecture",
+    "architecture/infrastructure-layer",
+    "state-data/dtos-and-mappers"
+  ]
+}

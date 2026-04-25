@@ -37,7 +37,7 @@
   ],
   "related": [
     "feature-development/create-a-feature",
-    "architecture/project-structure",
+    "architecture/feature-based-clean-architecture",
     "code-standards/imports"
   ]
 }

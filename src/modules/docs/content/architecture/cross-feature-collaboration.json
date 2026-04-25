@@ -1,0 +1,48 @@
+{
+  "order": 6,
+  "title": "Cross-Feature Collaboration",
+  "owner": "Frontend Tech Lead",
+  "lastUpdated": "2026-04-25",
+  "tags": [
+    "features",
+    "boundaries",
+    "collaboration"
+  ],
+  "summary": "When two features overlap, connect them through domain use cases, app orchestration, or explicit public contracts.",
+  "purpose": "Feature-based architecture needs a clear rule for real product moments where flows cross each other.",
+  "rule": "A feature must not import another feature's internals. When features need to collaborate, use a shared domain concept, an app-level orchestration flow, an explicit public feature contract, or promote the repeated behavior intentionally.",
+  "whenToUse": [
+    "One feature needs data or behavior owned by another feature.",
+    "A flow starts in one feature and completes in another.",
+    "Two screens share a business rule or permission decision.",
+    "A review finds imports between feature internals."
+  ],
+  "whenNotToUse": [
+    "Do not create a shared abstraction for a one-time interaction.",
+    "Do not import screens, hooks, mappers, or state from another feature's private folders.",
+    "Do not solve cross-feature collaboration with a global store unless the state is truly app-level.",
+    "Do not move code to shared without a stable contract and an owner."
+  ],
+  "recommended": {
+    "title": "Connect features through stable contracts",
+    "code": "src/modules/invoices/\n  public.ts\n  screens/InvoiceScreen.tsx\n  hooks/useInvoiceScreen.ts\n\nsrc/modules/payments/\n  screens/PaymentScreen.tsx\n  hooks/usePaymentScreen.ts\n\nsrc/domains/billing/\n  use-cases/can-pay-invoice.ts\n  ports/invoice-repository.ts\n\n// app flow decides how screens connect.\nconst BillingFlow = () => {\n  return <Stack.Screen name=\"Payment\" component={PaymentScreen} />\n}"
+  },
+  "avoid": {
+    "title": "Import another feature's internals",
+    "code": "import { useInvoiceScreen } from \"@/modules/invoices/hooks/useInvoiceScreen\"\nimport { mapInvoice } from \"@/modules/invoices/mappers/map-invoice\"\n\nconst PaymentScreen = () => {\n  const invoice = useInvoiceScreen()\n\n  return <PaymentView invoice={mapInvoice(invoice)} />\n}"
+  },
+  "why": "Features are ownership boundaries, not walls. Product flows can cross boundaries, but the connection must be explicit. If Payment imports Invoice internals, Invoice can no longer change safely. If both features depend on Billing domain use cases, a small public contract, or app-level flow composition, each feature keeps its private implementation while the product flow remains understandable.",
+  "checklist": [
+    "No feature imports another feature's private folders.",
+    "Shared behavior is expressed as a domain rule, use case, or stable public contract.",
+    "App-level flow composition handles navigation between feature screens.",
+    "Repeated cross-feature behavior has a documented owner.",
+    "The PR explains why the chosen collaboration path fits the product flow."
+  ],
+  "related": [
+    "architecture/feature-based-clean-architecture",
+    "architecture/domain-layer-structure",
+    "architecture/infrastructure-layer",
+    "feature-development/create-a-feature"
+  ]
+}

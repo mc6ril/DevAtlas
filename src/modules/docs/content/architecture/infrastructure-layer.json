@@ -1,0 +1,48 @@
+{
+  "order": 5,
+  "title": "Infrastructure Layer",
+  "owner": "Frontend Tech Lead",
+  "lastUpdated": "2026-04-25",
+  "tags": [
+    "infrastructure",
+    "adapters",
+    "ports"
+  ],
+  "summary": "Infrastructure contains technical adapters for HTTP, storage, analytics, native APIs, and platform services.",
+  "purpose": "The infrastructure layer keeps volatile technical details away from domain rules and feature views.",
+  "rule": "Infrastructure implements ports and technical clients. Features and domains should depend on contracts, not directly on fetch, SDKs, storage APIs, analytics clients, or native modules.",
+  "whenToUse": [
+    "Wrapping HTTP clients, GraphQL clients, SDKs, storage, analytics, logging, feature flags, or native modules.",
+    "Implementing a domain port with a real technical adapter.",
+    "Centralizing retry, headers, auth, serialization, or platform-specific behavior.",
+    "Replacing direct imports of SDKs from screens or hooks."
+  ],
+  "whenNotToUse": [
+    "Do not put business rules in infrastructure.",
+    "Do not make infrastructure the new shared folder for everything technical.",
+    "Do not import feature UI or feature hooks from infrastructure.",
+    "Do not expose raw SDK responses when the app expects domain models."
+  ],
+  "recommended": {
+    "title": "Infrastructure implements external details",
+    "code": "src/infrastructure/\n  http/\n    http-client.ts\n    auth-headers.ts\n  storage/\n    secure-storage.ts\n  analytics/\n    analytics-client.ts\n  billing/\n    http-invoice-repository.ts\n\n// domains/billing/ports/invoice-repository.ts\nexport type InvoiceRepository = {\n  getInvoice: (id: InvoiceId) => Promise<Invoice>\n}\n\n// infrastructure/billing/http-invoice-repository.ts\nexport const createHttpInvoiceRepository = (http: HttpClient): InvoiceRepository => ({\n  getInvoice: async (id) => mapInvoice(await http.get(`/invoices/${id}`)),\n})"
+  },
+  "avoid": {
+    "title": "Feature reaches through infrastructure directly",
+    "code": "const InvoiceScreen = () => {\n  useEffect(() => {\n    sdk.billing.invoices.get(invoiceId).then(setInvoice)\n  }, [invoiceId])\n\n  return <InvoiceView invoice={invoice} />\n}"
+  },
+  "why": "Infrastructure is where the outside world enters the app. The outside world changes often: endpoints, SDK versions, storage APIs, native permissions, analytics vendors, retry behavior, and auth headers. If those details leak into features, product code becomes hard to test and hard to change. Keeping infrastructure behind contracts lets the team replace technical mechanisms without rewriting business logic.",
+  "checklist": [
+    "Infrastructure code owns SDK, HTTP, storage, analytics, and native API details.",
+    "Infrastructure implements domain ports or app-level technical contracts.",
+    "Domain and presentation code do not import infrastructure implementations directly.",
+    "DTO mapping happens at the boundary before data reaches UI.",
+    "Technical failures are converted into app-level or domain-level errors."
+  ],
+  "related": [
+    "architecture/domain-layer-structure",
+    "state-data/api-layer",
+    "code-standards/error-handling",
+    "react-native/conventions"
+  ]
+}

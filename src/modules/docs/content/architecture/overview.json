@@ -1,5 +1,5 @@
 {
-  "order": 1,
+  "order": 2,
   "title": "Frontend Architecture Principles",
   "owner": "Frontend Tech Lead",
   "lastUpdated": "2026-04-20",
@@ -8,13 +8,14 @@
     "boundaries",
     "principles"
   ],
-  "summary": "Keep business rules independent from rendering and framework details.",
-  "purpose": "Architecture standards make features predictable to place, test, review, and change.",
-  "rule": "Feature code should separate UI, orchestration, domain decisions, data mapping, and shared infrastructure. Dependencies point inward toward stable domain concepts, not outward toward screens.",
+  "summary": "Keep business rules independent from rendering, frameworks, and delivery mechanisms.",
+  "purpose": "Architecture principles give the team a shared way to reason about code before choosing folders or libraries.",
+  "rule": "Feature code should separate UI, orchestration, domain decisions, data mapping, and infrastructure access. Dependencies point inward toward stable domain concepts, not outward toward screens, API clients, or native modules.",
   "whenToUse": [
     "Creating a feature that includes UI, API data, state, and business rules.",
     "Refactoring components that contain validation, mapping, or permissions logic.",
-    "Reviewing dependency direction between folders."
+    "Reviewing dependency direction between folders.",
+    "Deciding whether code belongs in a feature, domain, infrastructure, presentation, or shared layer."
   ],
   "whenNotToUse": [
     "For tiny static UI with no state, side effects, or business behavior.",
@@ -28,16 +29,18 @@
     "title": "Mix API calls, mapping, and UI",
     "code": "const ProfileScreen = () => {\n  const [user, setUser] = useState<UserDto | null>(null)\n\n  useEffect(() => {\n    api.getUser().then((dto) => setUser(dto))\n  }, [])\n\n  return <Text>{user?.first_name}</Text>\n}"
   },
-  "why": "When rendering code owns business rules, every UI change becomes risky. Keeping orchestration and mapping outside views makes code easier to reuse across React and React Native.",
+  "why": "When rendering code owns business rules, every UI change becomes risky and every backend change leaks into screens. The principle is simple: stable decisions go inward, volatile details stay outward. UI, APIs, storage, navigation, analytics, and native APIs are delivery mechanisms; they should depend on product rules, not define them.",
   "checklist": [
     "UI renders view models, not raw API DTOs.",
     "Business rules are testable without rendering a component.",
     "Shared code does not import feature-specific code.",
-    "Framework-specific details stay near the app boundary."
+    "Framework-specific details stay near the app boundary.",
+    "Infrastructure code implements contracts instead of being imported directly by UI."
   ],
   "related": [
-    "architecture/project-structure",
-    "state-data/api-layer",
-    "decisions/adr-001-feature-architecture"
+    "architecture/bad-architecture-example",
+    "architecture/feature-based-clean-architecture",
+    "architecture/domain-layer-structure",
+    "architecture/infrastructure-layer"
   ]
 }

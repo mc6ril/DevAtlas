@@ -36,7 +36,7 @@
     "Circular dependencies are removed before merge."
   ],
   "related": [
-    "architecture/project-structure",
+    "architecture/feature-based-clean-architecture",
     "feature-development/folder-structure",
     "code-standards/constants-object-freeze",
     "react/performance"

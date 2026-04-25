@@ -37,7 +37,7 @@
   ],
   "related": [
     "architecture/overview",
-    "architecture/project-structure",
+    "architecture/feature-based-clean-architecture",
     "feature-development/folder-structure"
   ]
 }

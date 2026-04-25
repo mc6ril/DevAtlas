@@ -103,7 +103,10 @@ export const intentEntrypoints = [
   { label: "Review a pull request", href: "/docs/pr-guide/reviewer-checklist" },
   { label: "Add a screen", href: "/docs/recipes/create-screen" },
   { label: "Refactor bad code", href: "/docs/architecture/overview" },
-  { label: "Understand architecture", href: "/docs/architecture/project-structure" },
+  {
+    label: "Understand architecture",
+    href: "/docs/architecture/feature-based-clean-architecture",
+  },
   { label: "Add tests", href: "/docs/testing/overview" },
   { label: "Create a component", href: "/docs/code-standards/components" },
   { label: "Fetch data", href: "/docs/recipes/fetch-data" },

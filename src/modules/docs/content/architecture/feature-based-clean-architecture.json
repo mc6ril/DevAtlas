@@ -1,0 +1,48 @@
+{
+  "order": 3,
+  "title": "Feature-Based Clean Architecture",
+  "owner": "Frontend Tech Lead",
+  "lastUpdated": "2026-04-25",
+  "tags": [
+    "folders",
+    "feature-folders",
+    "dependency-rules"
+  ],
+  "summary": "Structure the frontend around product capabilities, then keep domain and infrastructure boundaries explicit.",
+  "purpose": "This page turns the architecture principles into a concrete folder model that works for React and React Native features.",
+  "rule": "Use modules for feature delivery, domains for business concepts, infrastructure for technical adapters, presentation for shared UI, app for composition, and shared for stable cross-cutting utilities.",
+  "whenToUse": [
+    "Adding a new screen, flow, or reusable feature capability.",
+    "Moving duplicated logic out of a component.",
+    "Creating code that will be reused by multiple product areas.",
+    "Explaining where a new file belongs during review."
+  ],
+  "whenNotToUse": [
+    "Do not promote code to shared just because a second file imports it once.",
+    "Do not create domain folders for purely visual concepts.",
+    "Do not create infrastructure folders inside features when the concern is shared by the app."
+  ],
+  "recommended": {
+    "title": "Feature-based structure",
+    "code": "src/\n  app/\n    navigation/\n    providers/\n    routes/\n  modules/\n    invoices/\n      screens/\n      ui/\n      hooks/\n      mappers/\n      tests/\n  domains/\n    billing/\n      core/\n      use-cases/\n      ports/\n  infrastructure/\n    http/\n    storage/\n    analytics/\n    billing/\n  presentation/\n    components/\n    tokens/\n  shared/\n    result.ts\n    date-format.ts"
+  },
+  "avoid": {
+    "title": "File-type buckets",
+    "code": "src/\n  components/\n  hooks/\n  services/\n  types/\n  utils/\n  screens/"
+  },
+  "why": "File-type buckets look simple at first but hide ownership. Feature-based clean architecture keeps daily product work close to the feature while protecting business rules from UI, backend, storage, and platform changes. The folder is not the goal; the dependency direction is. Features orchestrate use cases, domains express decisions, and infrastructure handles technical details.",
+  "checklist": [
+    "The folder name communicates product ownership.",
+    "Reusable UI is in presentation, not inside a random feature.",
+    "Shared utilities are stable, tested, and domain-neutral.",
+    "Domain code does not import screens or components.",
+    "Features call domain use cases instead of importing infrastructure directly."
+  ],
+  "related": [
+    "architecture/bad-architecture-example",
+    "architecture/overview",
+    "architecture/domain-layer-structure",
+    "architecture/infrastructure-layer",
+    "decisions/adr-001-feature-architecture"
+  ]
+}

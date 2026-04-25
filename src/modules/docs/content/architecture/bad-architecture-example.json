@@ -1,0 +1,47 @@
+{
+  "order": 1,
+  "title": "Bad Architecture Example",
+  "owner": "Frontend Tech Lead",
+  "lastUpdated": "2026-04-25",
+  "tags": [
+    "architecture",
+    "anti-patterns",
+    "review"
+  ],
+  "summary": "Start with the failure mode: screens that own API calls, mapping, validation, permissions, navigation, and rendering.",
+  "purpose": "A bad example makes the architecture rules concrete. Developers should recognize the smell before they learn the folder structure.",
+  "rule": "Do not let a screen become the place where every concern meets. A screen should compose behavior and render a view; it should not own transport, mapping, domain decisions, analytics, permissions, and UI state all at once.",
+  "whenToUse": [
+    "Reviewing a large screen that is hard to test.",
+    "Explaining why a feature needs separation before moving files.",
+    "Refactoring code where a small change creates regressions in unrelated behavior.",
+    "Onboarding developers to the architecture path."
+  ],
+  "whenNotToUse": [
+    "Do not split a tiny static component just to satisfy architecture vocabulary.",
+    "Do not use this page to request a rewrite without naming the concrete risk.",
+    "Do not move code into folders before the responsibilities are clear."
+  ],
+  "recommended": {
+    "title": "Recognize the tangled screen",
+    "code": "const InvoiceScreen = () => {\n  const [invoice, setInvoice] = useState<InvoiceDto | null>(null)\n  const [error, setError] = useState<string | null>(null)\n\n  useEffect(() => {\n    analytics.track(\"invoice_opened\")\n\n    fetch(`/api/invoices/${invoiceId}`)\n      .then((response) => response.json())\n      .then((dto) => {\n        if (dto.status === \"blocked\") {\n          navigation.replace(\"Support\")\n          return\n        }\n\n        setInvoice(dto)\n      })\n      .catch(() => setError(\"Unable to load invoice\"))\n  }, [invoiceId])\n\n  if (error) return <ErrorState message={error} />\n\n  return <InvoiceView total={invoice?.total_cents} />\n}"
+  },
+  "avoid": {
+    "title": "Pretend folders alone fix the problem",
+    "code": "src/\n  screens/InvoiceScreen.tsx\n  services/invoiceService.ts\n  utils/invoiceUtils.ts\n  types/invoiceTypes.ts\n\n// The screen still decides transport, mapping, navigation, analytics, and rules."
+  },
+  "why": "The issue is not file length. The issue is decision ownership. When a screen knows about HTTP, DTO fields, analytics events, permission rules, navigation fallbacks, and rendering, every change has a wide blast radius. The same code is hard to test because there is no stable seam between product rules and technical details. The architecture exists to make each decision live in the smallest responsible place.",
+  "checklist": [
+    "The screen does not call API clients or fetch directly.",
+    "The screen does not inspect raw DTO fields.",
+    "Business decisions are not hidden inside rendering branches.",
+    "Analytics, permissions, navigation, and error handling are orchestrated deliberately.",
+    "A reviewer can name which responsibility should move first."
+  ],
+  "related": [
+    "architecture/overview",
+    "architecture/feature-based-clean-architecture",
+    "feature-development/ui-layer",
+    "code-standards/error-handling"
+  ]
+}
