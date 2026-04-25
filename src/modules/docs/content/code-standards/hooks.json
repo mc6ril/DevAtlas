@@ -36,6 +36,7 @@
     "Callbacks use functional state updates when needed."
   ],
   "related": [
+    "code-standards/arrow-functions",
     "code-standards/components",
     "state-data/state-management",
     "react/hooks-usage"

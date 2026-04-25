@@ -1,0 +1,45 @@
+{
+  "order": 3,
+  "title": "Arrow Function Conventions",
+  "owner": "Frontend Guild",
+  "lastUpdated": "2026-04-25",
+  "tags": [
+    "functions",
+    "arrow-functions",
+    "consistency"
+  ],
+  "summary": "Declare functions as const arrow functions for a consistent module style.",
+  "purpose": "Use one predictable function declaration style across components, hooks, helpers, handlers, mappers, and services.",
+  "rule": "Declare named behavior with const arrow functions. Public module APIs should export the const directly, while private helpers should stay local to the file.",
+  "whenToUse": [
+    "Creating React components.",
+    "Creating custom hooks.",
+    "Creating event handlers, mappers, services, utilities, or test helpers.",
+    "Exporting a function from a module."
+  ],
+  "whenNotToUse": [
+    "Do not rewrite third-party, generated, or copied reference code unless it becomes owned company code.",
+    "Do not use an inline arrow when a named const would make stack traces and review comments clearer."
+  ],
+  "recommended": {
+    "title": "Use const arrow functions",
+    "code": "export const ProfileScreen = () => {\n  const profile = useProfileScreen()\n\n  return <ProfileView {...profile} />\n}\n\nconst mapProfile = (dto: ProfileDto): Profile => {\n  return {\n    id: dto.id,\n    fullName: [dto.first_name, dto.last_name].join(\" \"),\n  }\n}"
+  },
+  "avoid": {
+    "title": "Avoid function declarations",
+    "code": "export function ProfileScreen() {\n  const profile = useProfileScreen()\n\n  return <ProfileView {...profile} />\n}\n\nfunction mapProfile(dto: ProfileDto): Profile {\n  return {\n    id: dto.id,\n    fullName: [dto.first_name, dto.last_name].join(\" \"),\n  }\n}"
+  },
+  "why": "A single function style makes files easier to scan, keeps exports consistent, and avoids mixing component, hook, helper, and service declarations in different styles.",
+  "checklist": [
+    "No new function xxx declarations were added.",
+    "Named functions use const xxx = () => {.",
+    "Exported functions use export const xxx = () => {.",
+    "Inline callbacks are used only when they stay small and local.",
+    "The function name still communicates the responsibility clearly."
+  ],
+  "related": [
+    "code-standards/components",
+    "code-standards/hooks",
+    "code-standards/typescript"
+  ]
+}

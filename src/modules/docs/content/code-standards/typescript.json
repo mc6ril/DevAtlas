@@ -1,5 +1,5 @@
 {
-  "order": 3,
+  "order": 4,
   "title": "TypeScript Conventions",
   "owner": "Frontend Guild",
   "lastUpdated": "2026-04-22",
@@ -36,8 +36,10 @@
     "No any or Function types without a documented exception."
   ],
   "related": [
+    "code-standards/constants-object-freeze",
     "state-data/api-layer",
     "state-data/dtos-and-mappers",
-    "code-standards/components"
+    "code-standards/components",
+    "code-standards/arrow-functions"
   ]
 }

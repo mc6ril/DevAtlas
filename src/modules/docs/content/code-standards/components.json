@@ -36,6 +36,7 @@
     "Callbacks are named by user intent."
   ],
   "related": [
+    "code-standards/arrow-functions",
     "feature-development/ui-layer",
     "react/component-composition",
     "ui-design-system/component-library"

@@ -1,5 +1,5 @@
 {
-  "order": 5,
+  "order": 7,
   "title": "Import Rules",
   "owner": "Frontend Guild",
   "lastUpdated": "2026-04-16",
@@ -38,6 +38,7 @@
   "related": [
     "architecture/project-structure",
     "feature-development/folder-structure",
+    "code-standards/constants-object-freeze",
     "react/performance"
   ]
 }

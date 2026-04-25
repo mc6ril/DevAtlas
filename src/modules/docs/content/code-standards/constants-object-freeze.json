@@ -1,0 +1,49 @@
+{
+  "order": 5,
+  "title": "Constants And Object.freeze",
+  "owner": "Frontend Guild",
+  "lastUpdated": "2026-04-25",
+  "tags": [
+    "constants",
+    "immutability",
+    "object-freeze",
+    "runtime-safety"
+  ],
+  "summary": "Export shared object constants with Object.freeze so module contracts cannot be mutated at runtime.",
+  "purpose": "Constants should be stable contracts. When a module exports routes, roles, feature flags, error codes, design tokens, labels, or configuration maps, consumers must be able to trust that those values will not change during execution.",
+  "rule": "Use Object.freeze for exported object and array constants that represent shared application contracts. Pair it with precise TypeScript types so the contract is protected both at compile time and at runtime.",
+  "whenToUse": [
+    "Exporting object maps used by multiple modules.",
+    "Declaring roles, statuses, feature keys, permission keys, route names, error codes, event names, or analytics constants.",
+    "Creating configuration objects that should never be mutated after declaration.",
+    "Defining design-token-like values, copy maps, or lookup tables.",
+    "Replacing enum-like objects with plain TypeScript-friendly constants."
+  ],
+  "whenNotToUse": [
+    "Do not freeze short-lived local objects that are only used inside one function.",
+    "Do not freeze data that is intentionally built step by step before being returned.",
+    "Do not use Object.freeze as a substitute for proper state updates in React or React Native.",
+    "Do not assume Object.freeze is deep; nested objects must also be frozen or avoided when the nested value is part of the contract."
+  ],
+  "recommended": {
+    "title": "Freeze exported constant contracts",
+    "code": "export const USER_ROLES = Object.freeze({\n  admin: \"admin\",\n  reviewer: \"reviewer\",\n  member: \"member\",\n})\n\nexport type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES]\n\nexport const ERROR_COPY = Object.freeze({\n  network: \"Check your connection and try again.\",\n  unauthorized: \"Sign in again to continue.\",\n  unknown: \"Something went wrong.\",\n} satisfies Record<AppErrorCode, string>)"
+  },
+  "avoid": {
+    "title": "Do not export mutable constant objects",
+    "code": "export const USER_ROLES = {\n  admin: \"admin\",\n  reviewer: \"reviewer\",\n  member: \"member\",\n}\n\n// Any importer can mutate the shared object.\nUSER_ROLES.admin = \"owner\""
+  },
+  "why": "The foundation of this decision is contract safety. In JavaScript, const protects the variable binding, not the value behind it. An exported const object can still be mutated by any importer, and that mutation is shared by every module that reads the object afterward. Object.freeze makes the exported value read-only at runtime, which turns accidental mutation into an immediate failure instead of a hidden cross-module side effect. This keeps constants honest: if a value is called a constant, the runtime should enforce that promise.",
+  "checklist": [
+    "Exported object or array constants are wrapped in Object.freeze.",
+    "The TypeScript type is derived from the frozen constant when possible.",
+    "The constant represents a stable module contract, not temporary local data.",
+    "Nested objects are avoided or frozen explicitly.",
+    "Consumers read constants without mutating or extending them."
+  ],
+  "related": [
+    "code-standards/typescript",
+    "code-standards/imports",
+    "architecture/overview"
+  ]
+}
