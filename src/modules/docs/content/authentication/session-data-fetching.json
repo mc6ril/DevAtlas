@@ -1,0 +1,49 @@
+{
+  "order": 3,
+  "title": "Session Data Fetching",
+  "owner": "Security + Frontend Leads",
+  "lastUpdated": "2026-04-25",
+  "tags": [
+    "session",
+    "fetch-data",
+    "current-user",
+    "permissions"
+  ],
+  "summary": "Fetch the minimum current-user data needed to render, authorize, and personalize the app.",
+  "purpose": "Teams need a clear answer to what is fetched after login and why it is fetched server-side.",
+  "rule": "After the session cookie is established, fetch a current-user session model from the server. It should include identity, roles, permissions, account context, and safe preferences. It should not include tokens, secrets, or raw provider payloads.",
+  "whenToUse": [
+    "Rendering protected layouts and app shells.",
+    "Checking role-based or permission-based access.",
+    "Personalizing UI with email, name, locale, theme, workspace, or account context.",
+    "Fetching feature data that depends on the authenticated user."
+  ],
+  "whenNotToUse": [
+    "Do not fetch the full user profile when a route only needs to know whether a session exists.",
+    "Do not include access tokens, refresh tokens, password hashes, MFA secrets, or provider internals in user data.",
+    "Do not trust user data stored in a client-readable cookie for authorization.",
+    "Do not duplicate the same current-user fetch in every leaf component."
+  ],
+  "recommended": {
+    "title": "Current session model",
+    "code": "type CurrentSession = {\n  user: {\n    id: UserId\n    email: string\n    displayName: string\n  }\n  account: {\n    id: AccountId\n    plan: AccountPlan\n  }\n  roles: UserRole[]\n  permissions: PermissionKey[]\n  preferences: {\n    theme: ThemePreference\n    locale: Locale\n  }\n}\n\nexport const getCurrentSession = async (): Promise<CurrentSession | null> => {\n  const session = await sessionRepository.getFromCookies()\n  if (!session) return null\n\n  return authGateway.fetchCurrentSession(session)\n}"
+  },
+  "avoid": {
+    "title": "Do not fetch or expose token-shaped data",
+    "code": "type ClientAuthState = {\n  accessToken: string\n  refreshToken: string\n  providerPayload: unknown\n  user: unknown\n}\n\nwindow.localStorage.setItem(\"auth\", JSON.stringify(clientAuthState))"
+  },
+  "why": "We fetch current-user data because the token proves a session, but the UI needs a safe application model: who the user is, what account they are in, what they can do, and which preferences affect rendering. This model is data, not authentication material. Keeping token material out of client state reduces the blast radius of XSS and keeps authorization decisions server-verifiable.",
+  "checklist": [
+    "Current-session data excludes tokens and secrets.",
+    "The current-session model is mapped from provider/backend data.",
+    "Authorization uses roles and permissions from trusted server data.",
+    "Preferences are safe to expose to the client.",
+    "Feature data fetching receives user context from the server session."
+  ],
+  "related": [
+    "authentication/cookies-security-state",
+    "authentication/clean-architecture",
+    "state-data/api-layer",
+    "state-data/dtos-and-mappers"
+  ]
+}

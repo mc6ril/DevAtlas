@@ -107,6 +107,7 @@ export const intentEntrypoints = [
     label: "Understand architecture",
     href: "/docs/architecture/feature-based-clean-architecture",
   },
+  { label: "Implement auth", href: "/docs/authentication/overview" },
   { label: "Add tests", href: "/docs/testing/overview" },
   { label: "Create a component", href: "/docs/code-standards/components" },
   { label: "Fetch data", href: "/docs/recipes/fetch-data" },

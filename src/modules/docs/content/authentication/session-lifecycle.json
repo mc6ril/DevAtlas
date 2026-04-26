@@ -1,0 +1,49 @@
+{
+  "order": 6,
+  "title": "Session Lifecycle And Active Connection",
+  "owner": "Security + Frontend Leads",
+  "lastUpdated": "2026-04-25",
+  "tags": [
+    "session",
+    "refresh",
+    "lifecycle",
+    "active-connection"
+  ],
+  "summary": "Keep the user connected with server-managed refresh and clear client-side recovery states.",
+  "purpose": "The app should preserve a valid session without exposing refresh tokens or forcing unnecessary logins.",
+  "rule": "Maintain active sessions through server-side refresh using secure cookies. The client may trigger lightweight session checks on focus, resume, or important navigation, but it must not own refresh tokens.",
+  "whenToUse": [
+    "Implementing remember-me behavior.",
+    "Refreshing an expiring session.",
+    "Handling app focus, mobile resume, or long-running tabs.",
+    "Recovering from expired sessions during API calls."
+  ],
+  "whenNotToUse": [
+    "Do not store refresh tokens in client-readable storage.",
+    "Do not refresh on every render.",
+    "Do not keep a dead session alive after logout or provider revocation.",
+    "Do not hide session-expired errors behind endless retries."
+  ],
+  "recommended": {
+    "title": "Server-owned refresh lifecycle",
+    "code": "const refreshCurrentSession = async () => {\n  const session = await sessionRepository.getFromCookies()\n\n  if (!session) return null\n  if (!session.needsRefresh) return session\n\n  const refreshedSession = await authProvider.refresh(session)\n  await sessionRepository.save(refreshedSession)\n\n  return refreshedSession\n}\n\nconst onAppFocus = async () => {\n  await fetch(\"/api/auth/session\", { method: \"POST\" })\n}"
+  },
+  "avoid": {
+    "title": "Client owns long-lived credentials",
+    "code": "const refreshToken = localStorage.getItem(\"refresh_token\")\n\nsetInterval(async () => {\n  const nextToken = await authProvider.refresh(refreshToken)\n  localStorage.setItem(\"access_token\", nextToken)\n}, 60_000)"
+  },
+  "why": "A session is a server trust relationship, not a client preference. Keeping refresh server-side means XSS cannot steal long-lived credentials from localStorage or a JavaScript store. Client-side lifecycle hooks are still useful, but they should only ask the server to validate or refresh the session and then react to the result.",
+  "checklist": [
+    "Refresh tokens are never stored in localStorage, sessionStorage, or client state.",
+    "Session refresh happens through a server function or route handler.",
+    "Focus/resume checks are throttled and lightweight.",
+    "Expired sessions show a clear re-authentication path.",
+    "Logout clears cookies and invalidates server-side session state."
+  ],
+  "related": [
+    "authentication/cookies-security-state",
+    "authentication/rendering-model",
+    "code-standards/error-handling",
+    "react-native/conventions"
+  ]
+}

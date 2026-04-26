@@ -1,0 +1,6 @@
+{
+  "order": 2.5,
+  "title": "Authentication",
+  "description": "How we protect routes, fetch session data, keep sessions active, and stay aligned with clean architecture.",
+  "owner": "Security + Frontend Leads"
+}

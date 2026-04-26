@@ -1,0 +1,48 @@
+{
+  "order": 4,
+  "title": "Authentication Clean Architecture",
+  "owner": "Security + Frontend Leads",
+  "lastUpdated": "2026-04-25",
+  "tags": [
+    "clean-architecture",
+    "domains",
+    "infrastructure",
+    "auth"
+  ],
+  "summary": "Keep auth domain decisions separate from framework routing, cookies, SDKs, and feature UI.",
+  "purpose": "Authentication touches many layers. This page defines where each responsibility belongs so auth code does not become a hidden global dependency.",
+  "rule": "Auth business decisions belong in the auth domain. Cookie handling, provider SDKs, HTTP clients, storage, and token refresh belong in infrastructure. Features consume auth through use cases, server helpers, or public contracts.",
+  "whenToUse": [
+    "Creating login, logout, refresh, session validation, permission checks, or auth provider adapters.",
+    "Deciding whether auth code belongs in domains, modules, infrastructure, app, or shared.",
+    "Reviewing direct imports of cookies, SDKs, or auth stores from feature code."
+  ],
+  "whenNotToUse": [
+    "Do not put auth domain rules in proxy.ts.",
+    "Do not import provider SDKs from feature screens or hooks.",
+    "Do not let every feature read cookies directly.",
+    "Do not place token refresh logic in UI components."
+  ],
+  "recommended": {
+    "title": "Auth folders by responsibility",
+    "code": "src/\n  app/\n    login/page.tsx\n    app/layout.tsx\n    proxy.ts\n  modules/\n    auth/\n      screens/LoginScreen.tsx\n      ui/LoginForm.tsx\n      hooks/useLoginForm.ts\n      routing/auth-routes.ts\n  domains/\n    auth/\n      core/current-session.ts\n      core/permission.ts\n      use-cases/can-access-route.ts\n      use-cases/require-permission.ts\n      ports/session-repository.ts\n      ports/auth-provider.ts\n  infrastructure/\n    auth/\n      cookie-session-repository.ts\n      auth-provider-client.ts\n      refresh-session.ts"
+  },
+  "avoid": {
+    "title": "Feature imports infrastructure details",
+    "code": "import { cookies } from \"next/headers\"\nimport { authSdk } from \"@/infrastructure/auth/auth-sdk\"\n\nexport const BillingScreen = () => {\n  const token = cookies().get(\"session\")\n  const user = authSdk.decode(token)\n\n  return <BillingView user={user} />\n}"
+  },
+  "why": "The clean architecture rule is dependency direction. UI and app routing are volatile. Auth provider SDKs and cookie APIs are technical details. The stable part is the company meaning of a session, a user, a role, a permission, and an access decision. Those concepts should be testable without Next, React, cookies, or the provider SDK.",
+  "checklist": [
+    "Auth domain defines CurrentSession, Permission, Role, and access decisions.",
+    "Infrastructure implements session and provider ports.",
+    "Features do not read tokens or cookies directly.",
+    "Proxy uses lightweight route decisions, not full business workflows.",
+    "Server data fetching uses auth contracts instead of provider payloads."
+  ],
+  "related": [
+    "architecture/domain-layer-structure",
+    "architecture/infrastructure-layer",
+    "authentication/middleware-route-protection",
+    "authentication/session-data-fetching"
+  ]
+}

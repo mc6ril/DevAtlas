@@ -1,0 +1,49 @@
+{
+  "order": 2,
+  "title": "Middleware Route Protection",
+  "owner": "Security + Frontend Leads",
+  "lastUpdated": "2026-04-25",
+  "tags": [
+    "middleware",
+    "proxy",
+    "route-protection",
+    "nextjs"
+  ],
+  "summary": "Use middleware/proxy as the first gate for protected and guest-only routes.",
+  "purpose": "Route protection should happen before protected UI renders, before expensive data fetching starts, and before a user sees an unauthorized screen flash.",
+  "rule": "In Next 16, implement route gating in src/proxy.ts. The team may still call this middleware, but the framework file convention is proxy. Proxy checks for the presence and basic validity of the session cookie, then redirects unauthenticated users away from protected routes and authenticated users away from guest-only routes.",
+  "whenToUse": [
+    "Protecting dashboard, account, admin, billing, or app-shell routes.",
+    "Redirecting authenticated users away from login and signup pages.",
+    "Blocking a request before rendering or data fetching starts.",
+    "Centralizing route-level auth behavior."
+  ],
+  "whenNotToUse": [
+    "Do not fetch the full user profile in middleware/proxy.",
+    "Do not perform expensive permission graphs or feature data loading in middleware/proxy.",
+    "Do not rely on middleware/proxy alone for authorization.",
+    "Do not share mutable app services or request-specific globals with middleware/proxy."
+  ],
+  "recommended": {
+    "title": "Route gate in src/proxy.ts",
+    "code": "import type { NextProxy } from \"next/server\"\nimport { NextResponse } from \"next/server\"\nimport { AUTH_ROUTES, PROTECTED_ROUTES } from \"@/modules/auth/routing/auth-routes\"\nimport { hasSessionCookie } from \"@/modules/auth/server/session-cookie\"\n\nexport const proxy: NextProxy = (request) => {\n  const pathname = request.nextUrl.pathname\n  const isProtectedRoute = PROTECTED_ROUTES.some((route) => pathname.startsWith(route))\n  const isAuthRoute = AUTH_ROUTES.some((route) => pathname.startsWith(route))\n  const hasSession = hasSessionCookie(request.cookies)\n\n  if (isProtectedRoute && !hasSession) {\n    return NextResponse.redirect(new URL(\"/login\", request.url))\n  }\n\n  if (isAuthRoute && hasSession) {\n    return NextResponse.redirect(new URL(\"/app\", request.url))\n  }\n\n  return NextResponse.next()\n}\n\nexport const config = {\n  matcher: [\"/app/:path*\", \"/admin/:path*\", \"/login\", \"/signup\"],\n}"
+  },
+  "avoid": {
+    "title": "Protect only in the client",
+    "code": "const AdminPage = () => {\n  const user = useAuthStore((state) => state.user)\n\n  useEffect(() => {\n    if (!user) router.replace(\"/login\")\n  }, [user])\n\n  return <AdminDashboard />\n}"
+  },
+  "why": "We choose middleware/proxy because it runs before route rendering and before the page starts fetching data. It prevents protected UI flashes, avoids unnecessary server work for unauthenticated requests, and gives one readable place for route-level auth policy. It is not the full security model: every server action, route handler, and backend request must still validate the session and authorization.",
+  "checklist": [
+    "Protected and guest-only route groups are explicit constants.",
+    "Proxy checks only lightweight session signals.",
+    "Proxy redirects before rendering protected pages.",
+    "Server-side data access validates the session again.",
+    "The matcher includes protected routes and auth routes only."
+  ],
+  "related": [
+    "authentication/overview",
+    "authentication/rendering-model",
+    "authentication/cookies-security-state",
+    "architecture/infrastructure-layer"
+  ]
+}

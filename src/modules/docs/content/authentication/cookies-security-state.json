@@ -1,0 +1,51 @@
+{
+  "order": 7,
+  "title": "Cookies, Security, And State",
+  "owner": "Security + Frontend Leads",
+  "lastUpdated": "2026-04-25",
+  "tags": [
+    "cookies",
+    "cybersecurity",
+    "state-management",
+    "xss",
+    "csrf"
+  ],
+  "summary": "Store tokens in secure HttpOnly cookies, keep user data as server-fetched state, and keep client auth state minimal.",
+  "purpose": "This page answers what belongs in cookies, what belongs in state management, and how we reduce common web security risks.",
+  "rule": "Authentication tokens belong in HttpOnly, Secure, SameSite cookies. User data is not the token; fetch it as current-session data and store only safe, non-sensitive UI state client-side. Never store access or refresh tokens in localStorage or global client stores.",
+  "whenToUse": [
+    "Choosing where to store auth tokens.",
+    "Choosing whether to store email, theme, locale, roles, or preferences.",
+    "Designing global auth state.",
+    "Reviewing cyber security risks around XSS, CSRF, session fixation, and data leakage."
+  ],
+  "whenNotToUse": [
+    "Do not put access tokens or refresh tokens in JavaScript-readable storage.",
+    "Do not put sensitive profile data, permissions, or secrets in client-readable cookies.",
+    "Do not trust a client-readable cookie for authorization.",
+    "Do not keep stale user data in a global store after logout."
+  ],
+  "recommended": {
+    "title": "Separate token storage from user state",
+    "code": "const sessionCookieOptions = Object.freeze({\n  httpOnly: true,\n  secure: true,\n  sameSite: \"lax\",\n  path: \"/\",\n  priority: \"high\",\n})\n\n// Server only: token/session id cookie.\nawait sessionCookieStore.set(\"session\", encryptedSession, sessionCookieOptions)\n\n// Client safe: UI state only.\nconst authViewState = {\n  status: \"authenticated\",\n  email: session.user.email,\n  theme: session.preferences.theme,\n}"
+  },
+  "avoid": {
+    "title": "Do not mix credentials and user UI data",
+    "code": "document.cookie = `access_token=${accessToken}`\nlocalStorage.setItem(\"refresh_token\", refreshToken)\nlocalStorage.setItem(\"user\", JSON.stringify({\n  email: user.email,\n  roles: user.roles,\n  permissions: user.permissions,\n}))"
+  },
+  "why": "Cybersecurity depends on reducing what JavaScript can read and what attackers can reuse. HttpOnly cookies protect token material from most XSS exfiltration paths. Secure prevents sending cookies over HTTP. SameSite reduces CSRF exposure for common navigation flows. User data such as email, theme, or locale is not authentication material, but it can still become stale or sensitive depending on the field. Treat it as fetched app data, not as proof of identity.",
+  "checklist": [
+    "Session cookies are HttpOnly, Secure, SameSite, path-scoped, and encrypted or opaque.",
+    "Access and refresh tokens are never exposed to JavaScript.",
+    "Client auth state contains status and safe display data only.",
+    "Authorization never trusts client-readable cookies or localStorage.",
+    "Logout clears client state and invalidates server session state.",
+    "Sensitive changes require fresh server validation."
+  ],
+  "related": [
+    "authentication/session-data-fetching",
+    "authentication/session-lifecycle",
+    "authentication/user-preferences",
+    "state-data/state-management"
+  ]
+}

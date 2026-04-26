@@ -1,0 +1,50 @@
+{
+  "order": 8,
+  "title": "User Data And Preferences",
+  "owner": "Security + Frontend Leads",
+  "lastUpdated": "2026-04-25",
+  "tags": [
+    "user",
+    "preferences",
+    "cookies",
+    "theme"
+  ],
+  "summary": "After login, fetch the user as app data; do not treat user profile fields as the session token.",
+  "purpose": "Teams often confuse storing the session with storing the current user. This page separates token storage from safe personalization data.",
+  "rule": "Once the connection is established, do not store the full user object in an auth cookie. Store only the session token or opaque session id in the secure session cookie. Fetch the current user from the server, then keep safe display data and preferences in app state. Low-risk preferences such as theme may use a separate non-HttpOnly cookie when needed before hydration.",
+  "whenToUse": [
+    "Displaying email, name, avatar, locale, theme, workspace, or account switcher state.",
+    "Persisting UI preferences across reloads.",
+    "Deciding whether a field belongs in a cookie, server session, or client store.",
+    "Rendering theme before hydration."
+  ],
+  "whenNotToUse": [
+    "Do not store roles or permissions in a client-readable cookie for authorization.",
+    "Do not store the full user profile in the session cookie.",
+    "Do not store sensitive profile fields in localStorage.",
+    "Do not let client preferences override server authorization."
+  ],
+  "recommended": {
+    "title": "Fetch user data and keep preferences separate",
+    "code": "type CurrentUserViewModel = {\n  email: string\n  displayName: string\n  theme: ThemePreference\n  locale: Locale\n}\n\nexport const getCurrentUserViewModel = async (): Promise<CurrentUserViewModel> => {\n  const session = await getCurrentSession()\n  if (!session) redirect(\"/login\")\n\n  return {\n    email: session.user.email,\n    displayName: session.user.displayName,\n    theme: session.preferences.theme,\n    locale: session.preferences.locale,\n  }\n}\n\n// Optional: theme cookie can be client-readable because it is not auth proof.\nconst themeCookie = \"dark\""
+  },
+  "avoid": {
+    "title": "Do not put the user object in the auth cookie",
+    "code": "cookieStore.set(\"session\", JSON.stringify({\n  token,\n  user: {\n    email: user.email,\n    roles: user.roles,\n    permissions: user.permissions,\n    preferences: user.preferences,\n  },\n}))"
+  },
+  "why": "The token or opaque session id answers: is this request connected to a trusted session? The current user model answers: what can we display and what context does the app need? Mixing both creates oversized cookies, stale identity data, and authorization bugs. User fields should be fetched and refreshed as application data; cookies should carry only the minimal data needed for the browser and server to maintain the session.",
+  "checklist": [
+    "The session cookie contains only token material or an opaque session id.",
+    "The current user is fetched from the server after session validation.",
+    "Email, display name, theme, and locale are treated as display data.",
+    "Roles and permissions are refreshed from trusted server data.",
+    "Theme may use a separate client-readable cookie if needed before hydration.",
+    "Logout clears user state and preference caches that are scoped to the user."
+  ],
+  "related": [
+    "authentication/cookies-security-state",
+    "authentication/session-data-fetching",
+    "authentication/rendering-model",
+    "ui-design-system/component-library"
+  ]
+}

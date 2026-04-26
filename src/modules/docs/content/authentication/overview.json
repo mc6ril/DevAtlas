@@ -1,0 +1,51 @@
+{
+  "order": 1,
+  "title": "Authentication Overview",
+  "owner": "Security + Frontend Leads",
+  "lastUpdated": "2026-04-25",
+  "tags": [
+    "authentication",
+    "session",
+    "middleware",
+    "proxy",
+    "mermaid"
+  ],
+  "summary": "Use middleware/proxy for route protection, server data fetching for session truth, and clean architecture boundaries for auth decisions.",
+  "purpose": "This chapter gives React and React Native teams one straight path for implementing authentication without mixing security, routing, API, and UI concerns.",
+  "rule": "Authentication is split into route protection, session validation, user data fetching, authorization decisions, and UI state. Middleware/proxy performs fast route gating. Server-side auth services validate the session and fetch the current user. Features consume auth through stable contracts, not by reading tokens directly.",
+  "whenToUse": [
+    "Building login, logout, protected pages, account screens, or role-based access.",
+    "Adding server data fetching that depends on the current user.",
+    "Deciding where auth code belongs in the clean architecture.",
+    "Reviewing whether a route is public, guest-only, authenticated, or authorized."
+  ],
+  "whenNotToUse": [
+    "Do not put token parsing, refresh logic, or authorization rules directly inside UI components.",
+    "Do not rely only on client state to protect sensitive routes or data.",
+    "Do not treat middleware/proxy as the only security layer; server actions, route handlers, and API calls must validate authorization too.",
+    "Do not store the auth token in localStorage or a readable client store."
+  ],
+  "recommended": {
+    "title": "Mermaid: screens, middleware/proxy, and data fetching",
+    "code": "flowchart TD\n  PublicScreen[Public screen] --> LoginScreen[Login screen]\n  LoginScreen --> LoginAction[Server action: login]\n  LoginAction --> AuthProvider[Auth provider]\n  AuthProvider --> SessionCookie[HttpOnly secure session cookie]\n  SessionCookie --> ProtectedRequest[Request /app/dashboard]\n  ProtectedRequest --> Proxy[Middleware / Next proxy]\n  Proxy -->|No valid session cookie| RedirectLogin[Redirect to /login]\n  Proxy -->|Session cookie present| ProtectedPage[Protected page]\n  ProtectedPage --> GetSession[getCurrentSession]\n  GetSession --> FetchMe[Fetch /me: identity, roles, permissions, preferences]\n  FetchMe --> DomainAuth[Domain auth use cases]\n  DomainAuth --> FeatureScreen[Feature screen]\n  FeatureScreen --> ServerData[Fetch feature data with user context]\n  ServerData --> View[Render view states]"
+  },
+  "avoid": {
+    "title": "Do not make the client the source of auth truth",
+    "code": "const DashboardScreen = () => {\n  const token = localStorage.getItem(\"access_token\")\n  const user = useUserStore((state) => state.user)\n\n  if (!token || !user) return <LoginRedirect />\n\n  return <DashboardView user={user} />\n}"
+  },
+  "why": "The foundation is defense in depth. Middleware/proxy gives a fast first gate before rendering protected routes. Server-side session validation remains the source of truth for sensitive data. Client state only improves UX after the server has established the session. This keeps auth secure, predictable, and compatible with feature-based clean architecture.",
+  "checklist": [
+    "Protected routes pass through middleware/proxy.",
+    "Server actions and route handlers validate the session again.",
+    "The token stays in an HttpOnly secure cookie.",
+    "User identity and preferences are fetched as data, not trusted from client state.",
+    "Auth decisions live in domain/use-case code, not UI rendering branches.",
+    "Diagrams and PR descriptions show where auth is enforced."
+  ],
+  "related": [
+    "authentication/middleware-route-protection",
+    "authentication/session-data-fetching",
+    "authentication/clean-architecture",
+    "authentication/cookies-security-state"
+  ]
+}

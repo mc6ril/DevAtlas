@@ -1,0 +1,50 @@
+{
+  "order": 5,
+  "title": "Rendering Model For Auth",
+  "owner": "Security + Frontend Leads",
+  "lastUpdated": "2026-04-25",
+  "tags": [
+    "rendering",
+    "dynamic",
+    "ssr",
+    "cookies",
+    "nextjs"
+  ],
+  "summary": "Authenticated pages are request-time rendered because session cookies are request-time data.",
+  "purpose": "Teams need to know whether protected pages are static, dynamic, SSR, or client-rendered.",
+  "rule": "Treat protected pages and layouts that read cookies or current-session data as dynamic request-time routes. Public marketing and documentation pages can remain static. Do not move auth checks to client rendering to preserve static generation.",
+  "whenToUse": [
+    "Building protected layouts that call getCurrentSession.",
+    "Fetching user-specific server data.",
+    "Rendering app shells that depend on roles, account context, or preferences.",
+    "Explaining performance tradeoffs in architecture review."
+  ],
+  "whenNotToUse": [
+    "Do not make a protected page static if its content depends on the current user.",
+    "Do not fetch sensitive user data only after hydration.",
+    "Do not cache personalized responses globally.",
+    "Do not read cookies in a shared root layout that wraps public pages unless all children must become dynamic."
+  ],
+  "recommended": {
+    "title": "Dynamic protected layout",
+    "code": "export const AppLayout = async ({ children }: { children: React.ReactNode }) => {\n  const session = await getCurrentSession()\n\n  if (!session) {\n    redirect(\"/login\")\n  }\n\n  return <AuthenticatedShell session={session}>{children}</AuthenticatedShell>\n}"
+  },
+  "avoid": {
+    "title": "Client-only auth gate",
+    "code": "\"use client\"\n\nexport const AppLayout = ({ children }: { children: React.ReactNode }) => {\n  const user = useAuthStore((state) => state.user)\n\n  if (!user) return null\n\n  return <>{children}</>\n}"
+  },
+  "why": "Next cookies are request-time data. Reading cookies or deriving a current session means the route cannot be fully static for every user. That is the correct tradeoff for protected product surfaces: security and correctness come before static rendering. Keep public pages static, keep authenticated surfaces dynamic, and keep expensive feature data fetching scoped to the routes that need it.",
+  "checklist": [
+    "Protected layouts read session data on the server.",
+    "Public routes stay outside auth-dependent layouts.",
+    "Personalized data is not globally cached.",
+    "Client components receive only safe serialized session data.",
+    "Route-level auth and data-level auth both exist."
+  ],
+  "related": [
+    "authentication/session-data-fetching",
+    "authentication/middleware-route-protection",
+    "react/performance",
+    "state-data/state-management"
+  ]
+}
